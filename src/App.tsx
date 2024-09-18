@@ -1,17 +1,16 @@
-import { useState } from 'react'
-import './App.css'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import AppointmentScheduler from "./pages/AppointmentScheduler";
+import { Header } from "./layouts/Header";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
+        <Route path="/" element={<AppointmentScheduler />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
