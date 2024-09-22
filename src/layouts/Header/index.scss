@@ -6,4 +6,20 @@
     font-weight: 600;
     font-size: 16px;
   }
+
+  .ant-menu-light.ant-menu-horizontal > .ant-menu-submenu-open::after {
+    border-bottom-color: theme("colors.primary-blue.50") !important;
+  }
+  .ant-menu-item {
+    &:hover::after {
+      border-bottom-color: theme("colors.primary-blue.50") !important;
+    }
+  }
+
+  .ant-menu-item-selected {
+    color: theme("colors.primary-blue.50") !important;
+    &::after {
+      border-bottom-color: theme("colors.primary-blue.50") !important;
+    }
+  }
 }

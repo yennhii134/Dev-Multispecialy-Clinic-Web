@@ -1,17 +1,19 @@
 import { Button, DatePicker, Form, Input, Radio, Select } from "antd";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { cityState, districtState, stepState } from "../states/states";
-import { useEffect, useState } from "react";
-import { useAddress } from "../hooks/useAddress";
+import { cityState, districtState, stepState } from "../../stores/states";
+import {  useState } from "react";
+import { useAddress } from "../../hooks/useAddress";
 
 export const Step2 = () => {
   const setStep = useSetRecoilState(stepState);
   const [city, setCity] = useRecoilState(cityState);
   // const [district, setDistrict] = useRecoilState(districtState);
-  // const [district, setDistrict] = useState<any>([]);
+  const [district, setDistrict] = useState<any>([]);
   const { fetchAddressData, fetchDistrictData } = useAddress();
   const cityData = fetchAddressData();
   const districtData = fetchDistrictData();
+
+  console.log(cityData, districtData);
 
   const handleSelectCity = (value: string) => {
     setCity(value);
@@ -63,7 +65,7 @@ export const Step2 = () => {
             placeholder="Chọn quận/huyện"
             optionFilterProp="label"
             options={districtData}
-            // onChange={(value) => setDistrict(value)}
+            onChange={(value) => setDistrict(value)}
           ></Select>
         </Form.Item>
       </div>

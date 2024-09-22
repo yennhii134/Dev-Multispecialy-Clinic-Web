@@ -16,6 +16,8 @@ export default {
       },
       fontFamily: {
         roboto: ["roboto", "sans-serif", "ui-sans-serif", "system-ui"],
+        logo: ["Noto Serif"],
+        inherit: ["inherit"],
       },
     },
   },

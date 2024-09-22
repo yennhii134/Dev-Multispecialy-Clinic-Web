@@ -2,7 +2,7 @@ import { Form } from "antd";
 import appointmentScheduler from "@/assets/img/appointmentScheduler.png";
 import { Step1, Step2 } from "./components";
 import { useRecoilValue } from "recoil";
-import { stepState } from "./states/states";
+import { stepState } from "./stores/states";
 
 export default function AppointmentScheduler() {
   const [form] = Form.useForm();
@@ -18,7 +18,7 @@ export default function AppointmentScheduler() {
       >
         <h1 className="text-2xl font-bold mb-4">
           Đặt lịch thăm khám tại&nbsp;
-          <span className="text-primary-blue-200">DMC</span>
+          <span className="text-primary-blue-50">DMC</span>
         </h1>
         {step === 1 ? <Step1 /> : <Step2 />}
       </Form>

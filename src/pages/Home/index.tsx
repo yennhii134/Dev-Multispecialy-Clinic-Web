@@ -1,7 +1,11 @@
+import { Slide, Doctors, Services } from "./components";
+
 export const Home = () => {
   return (
     <div>
-      <h1>Home</h1>
+      <Slide />
+      <Doctors />
+      <Services />
     </div>
   );
 };

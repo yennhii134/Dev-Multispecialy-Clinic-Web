@@ -5,9 +5,9 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { RiVipDiamondLine } from "react-icons/ri";
-import { specialtyData } from "../specialty-data";
+import { specialtyData } from "@/data/specialty-data";
 import { useSetRecoilState } from "recoil";
-import { stepState } from "../states/states";
+import { stepState } from "../../stores/states";
 
 export const Step1 = () => {
   const setStep = useSetRecoilState(stepState);
