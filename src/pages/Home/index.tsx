@@ -1,11 +1,13 @@
 import { Slide, Doctors, Services } from "./components";
+import { configStyleHome } from "@/theme/configStyle";
+import { ConfigProvider } from "antd";
 
 export const Home = () => {
   return (
-    <div>
+    <ConfigProvider theme={configStyleHome.theme}>
       <Slide />
-      <Doctors />
       <Services />
-    </div>
+      {/* <Doctors /> */}
+    </ConfigProvider>
   );
 };

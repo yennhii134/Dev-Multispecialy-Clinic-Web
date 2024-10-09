@@ -6,8 +6,8 @@ import classNames from "classnames";
 type MenuItem = Required<MenuProps>["items"][number];
 
 const caretDownClasses = classNames(
-  "text-secondary",
-  "group-hover:text-primary-blue-50",
+  "text-blue1",
+  "group-hover:text-blue2",
   "group-hover:transform",
   "group-hover:rotate-180"
 );

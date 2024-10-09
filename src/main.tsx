@@ -2,21 +2,22 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.scss";
+import "./theme/colors.scss";
 import { RecoilRoot } from "recoil";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
-import { configStyle } from "./config/configStyle.ts";
-
-const queryClient = new QueryClient();
+import { configStyleContainer } from "./theme/configStyle.ts";
+import { Toaster } from "react-hot-toast";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <ConfigProvider theme={configStyle.theme}>
+    <RecoilRoot>
+      <ConfigProvider theme={configStyleContainer.theme}>
+        <BrowserRouter>
+          <Toaster />
           <App />
-        </ConfigProvider>
-      </RecoilRoot>
-    </QueryClientProvider>
+        </BrowserRouter>
+      </ConfigProvider>
+    </RecoilRoot>
   </StrictMode>
 );

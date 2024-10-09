@@ -1,4 +1,4 @@
-import { theme } from "./src/config/theme";
+import { theme } from "./src/theme/theme";
 /** @type {import('tailwindcss').Config} */
 
 export default {
@@ -6,7 +6,6 @@ export default {
   theme: {
     extend: {
       colors: theme.colors,
-      textColor: theme.textColor,
       fontFamily: theme.fontFamily,
     },
   },

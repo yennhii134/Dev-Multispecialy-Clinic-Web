@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Playpen+Sans:wght@100..800&display=swap");
-@tailwind base;
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&family=Playwrite+NO:wght@100..400&display=swap');@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -9,9 +9,9 @@ body {
 
 a {
   text-decoration: inherit;
-  &:hover {
-    color: theme("colors.primary-blue.50") !important;
-  }
+  // &:hover {
+  //   color: theme("colors.blue1") !important;
+  // }
 }
 
 body {
@@ -19,3 +19,7 @@ body {
   padding: 0;
 }
 
+.ant-form-item-label {
+  font-weight: 500;
+
+}
