@@ -13,6 +13,6 @@ export const theme = {
     roboto: ["roboto", "sans-serif", "ui-sans-serif", "system-ui"],
     logo: ["Noto Serif"],
     norge: ["Playwrite NO"],
-    banner: ["'Lexend', sans-serif"],
+    lexend: ["Lexend", "sans-serif"],
   },
 };

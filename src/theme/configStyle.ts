@@ -2,6 +2,7 @@ export const configStyleContainer = {
   theme: {
     token: {
       controlHeight: 40,
+      fontFamily: "lexend",
     },
     components: {
       Button: {

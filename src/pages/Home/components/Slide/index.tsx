@@ -26,21 +26,31 @@ export const Slide = () => {
             <img src={Banner2} alt="banner-2" className="h-20 w-auto" />
           </div>
         </div>
-      </div>
-      <div className="h-32 mx-20">
-        <div className="px-12 py-9 shadow-2xl rounded-3xl -translate-y-16 relative bg-white">
-          <div className="flex items-center justify-center">
-            <Button
-              type="primary"
-              className="px-16 py-6 mr-3"
-              onClick={handleBooking}
-            >
-              <span className="font-bold text-xl">Đặt lịch hẹn</span>
-            </Button>
-            <Button className="px-16 py-6">
-              <span className="font-bold text-xl">Tra cứu</span>
-            </Button>
+        <div className="h-32 mx-20">
+          <div className="px-12 py-9 shadow-2xl rounded-3xl -translate-y-16 relative bg-white">
+            <div className="flex items-center justify-center">
+              <Button
+                type="primary"
+                className="px-16 py-6 mr-3"
+                onClick={handleBooking}
+              >
+                <span className="font-bold text-xl">Đặt lịch hẹn</span>
+              </Button>
+              <Button className="px-16 py-6">
+                <span className="font-bold text-xl">Tra cứu</span>
+              </Button>
+            </div>
           </div>
+        </div>
+      </div>
+      <div className="flex flex-col justify-center items-center gap-2 py-14">
+        <h1 className="text-4xl text-blue2 font-bold">
+          Điểm đến của dịch vụ chăm sóc chất lượng cao
+        </h1>
+        <div className="max-w-[682px] text-center text-gray2 font-normal">
+          Với mạng lưới 13 bệnh viện và 4 phòng khám trên toàn quốc, DMC là đơn
+          vị y tế tư nhân hàng đầu, định hình văn hóa chăm sóc sức khỏe tại Việt
+          Nam.
         </div>
       </div>
     </div>

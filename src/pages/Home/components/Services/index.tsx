@@ -21,7 +21,7 @@ export const Services = () => {
     );
   };
   return (
-    <div className="py-12 px-6 bg-[#F0F9FF]">
+    <div className="py-12 px-10 bg-[#F0F9FF]">
       <div className="mb-8 text-3xl font-semibold">
         CÁC DỊCH VỤ Y TẾ{" "}
         <span className="text-blue1 font-semibold">DMC</span> CUNG CẤP{" "}

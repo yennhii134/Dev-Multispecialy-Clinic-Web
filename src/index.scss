@@ -1,10 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Playpen+Sans:wght@100..800&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&family=Playwrite+NO:wght@100..400&display=swap');@tailwind base;
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&family=Playwrite+NO:wght@100..400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: theme("fontFamily.lexend");
 }
 
 a {
@@ -21,5 +23,4 @@ body {
 
 .ant-form-item-label {
   font-weight: 500;
-
 }
