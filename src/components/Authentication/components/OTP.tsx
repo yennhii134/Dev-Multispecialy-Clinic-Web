@@ -1,15 +1,12 @@
 import { Button, Input } from "antd";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import bgOtp from "@/assets/svg/bg-otp.svg";
 import { useRecoilValue } from "recoil";
 import { phoneState } from "../stores";
 import { getApp, getApps, initializeApp } from "firebase/app";
-import {
-  ConfirmationResult,
-  getAuth,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
+import { ConfirmationResult, getAuth, RecaptchaVerifier } from "firebase/auth";
+import { FirebaseService } from "@/services/Firebase.service";
+import toast from "react-hot-toast";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -31,19 +28,13 @@ export const OTP = () => {
     useState<RecaptchaVerifier | null>(null);
   const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult | null>(null);
-  const [error, setError] = useState<any | "">("");
-  const [success, setSuccess] = useState<any | "">("");
-  const [isPeding, startTransaction] = useTransition();
-
+  const [isPeding, setIsPending] = useState<boolean>(false);
   useEffect(() => {
     const recaptchaVerifier = new RecaptchaVerifier(
       auth,
       "recaptcha-container",
       {
         size: "invisible",
-        callback: (response: any) => {
-          console.log("Recaptcha resolved with response:", response);
-        },
       }
     );
     setRecaptchaVerifier(recaptchaVerifier);
@@ -52,30 +43,62 @@ export const OTP = () => {
     };
   }, [auth]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!confirmationResult) {
-      startTransaction(() => {
-        setError("");
-        if (!recaptchaVerifier) {
-          return setError("RecaptchaVerifier not found");
-        }
-        try {
-          const phone_formatted =
-            phone[0] === "0" ? phone.replace("0", "+84") : phone;
-          signInWithPhoneNumber(auth, phone_formatted, recaptchaVerifier).then(
-            (result) => {
-              setConfirmationResult(result);
-            }
-          );
-          console.log(confirmationResult);
-          setSuccess("OTP sent successfully");
-        } catch (error) {
-          setError(error);
-          console.error(error);
-        }
-      });
+      try {
+        setIsPending(true);
+        const sendOTP = await FirebaseService.getInstance().sendOTP(
+          phone,
+          recaptchaVerifier
+        );
+        setConfirmationResult(sendOTP);
+        setIsPending(false);
+        toast.success("Mã OTP đã được gửi");
+      } catch (error: any) {
+        toast(error.message, {
+          icon: "❌",
+          duration: 5000,
+          style: {
+            border: "1px solid #ff4d4f",
+            boxShadow: "0 0 10px #ff4d4f",
+            borderRadius: "10px",
+            padding: "10px",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          },
+        });
+        setIsPending(false);
+      }
     } else {
-      console.log("OTP sent successfully");
+      try {
+        setIsPending(true);
+        const verify = await FirebaseService.getInstance().confirmOTP(
+          confirmationResult,
+          otp
+        );
+        console.log(verify);
+        setIsPending(false);
+        toast.success("Xác thực thành công");
+        setOtp("");
+      } catch (error: any) {
+        toast(error.message, {
+          icon: "❌",
+          duration: 5000,
+          style: {
+            border: "1px solid #ff4d4f",
+            boxShadow: "0 0 10px #ff4d4f",
+            borderRadius: "10px",
+            padding: "10px",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          },
+        });
+        setIsPending(false);
+      }
     }
   };
 
@@ -88,10 +111,6 @@ export const OTP = () => {
 
     return () => clearInterval(intervalId);
   }, [timeLeft]);
-
-  const handleSubmitOTP = (value: string) => {
-    setOtp(value);
-  };
 
   const handleResendOtp = () => {
     setTimeLeft(10);
@@ -113,7 +132,11 @@ export const OTP = () => {
             </div>
           </div>
           <div className="space-y-3">
-            <Input.OTP length={6} onChange={handleSubmitOTP} />
+            <Input.OTP
+              length={6}
+              value={otp}
+              onChange={(value) => setOtp(value)}
+            />
             <div className="w-full flex justify-end">
               {timeLeft === 0 ? (
                 <div
