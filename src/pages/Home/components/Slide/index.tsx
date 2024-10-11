@@ -44,10 +44,10 @@ export const Slide = () => {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center gap-2 py-14">
-        <h1 className="text-4xl text-blue2 font-bold">
+        <h1 className="text-3xl max-md:text-2xl text-blue2 font-bold text-center">
           Điểm đến của dịch vụ chăm sóc chất lượng cao
         </h1>
-        <div className="max-w-[682px] text-center text-gray2 font-normal">
+        <div className="max-md:text-sm max-w-[682px] text-center text-gray2 font-normal">
           Với mạng lưới 13 bệnh viện và 4 phòng khám trên toàn quốc, DMC là đơn
           vị y tế tư nhân hàng đầu, định hình văn hóa chăm sóc sức khỏe tại Việt
           Nam.

@@ -9,24 +9,24 @@ export const Services = () => {
     image: string;
   }) => {
     return (
-      <div className="col-span-1 flex flex-col items-center bg-white rounded-xl p-6">
+      <div className="col-span-1 flex flex-col items-center bg-white rounded-xl p-6 space-y-2">
         <div className=" flex items-center justify-center rounded-full size-14">
           <img src={props.image} alt="service" />
         </div>
-        <h3 className="text-xl font-bold mt-5">{props.title}</h3>
-        <p className="text-blue3 font-medium text-center">
+        <div className="text-center text-xl font-bold mt-5">{props.title}</div>
+        <div className="text-blue3 font-medium text-center">
           {props.description}
-        </p>
+        </div>
       </div>
     );
   };
   return (
     <div className="py-12 px-10 bg-[#F0F9FF]">
-      <div className="mb-8 text-3xl font-semibold">
-        CÁC DỊCH VỤ Y TẾ{" "}
-        <span className="text-blue1 font-semibold">DMC</span> CUNG CẤP{" "}
+      <div className="mb-8 text-3xl max-md:text-2xl font-semibold">
+        CÁC DỊCH VỤ Y TẾ <span className="text-blue1 font-semibold">DMC</span>{" "}
+        CUNG CẤP{" "}
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 max-md:grid-cols-1 gap-3">
         <ServiceItem
           title="Khám sức khỏe tổng quát"
           description="Khám sức khỏe tổng quát hàng năm, định kỳ"
