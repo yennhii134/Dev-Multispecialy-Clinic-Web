@@ -1,6 +1,8 @@
 import { Button, Form, Input, Radio, RadioChangeEvent } from "antd";
 import { useState } from "react";
 import { screenKey } from "../screenKey";
+import { phoneState } from "../stores";
+import { useRecoilState } from "recoil";
 
 export const SignUp = ({
   setIsScreen,
@@ -9,6 +11,8 @@ export const SignUp = ({
 }) => {
   const [valueRegister, setValueRegister] = useState("RegisterPatient");
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
+  const [phone, setPhone] = useRecoilState<string>(phoneState);
   const onChange = (e: RadioChangeEvent) => {
     setValueRegister(e.target.value);
   };
@@ -43,7 +47,11 @@ export const SignUp = ({
             ),
             RegisterUserName: (
               <Form.Item label="Số điện thoại" layout="vertical">
-                <Input placeholder="Nhập số điện thoại" />
+                <Input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Nhập số điện thoại"
+                />
               </Form.Item>
             ),
           }[valueRegister]
