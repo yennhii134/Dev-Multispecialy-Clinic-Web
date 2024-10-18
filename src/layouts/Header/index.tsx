@@ -29,7 +29,7 @@ export const Header = () => {
             />
             <i className="font-logo text-blue1 font-bold text-4xl">DMC</i>
           </Link>
-          <div className="flex-grow">
+          {/* <div className="flex-grow">
             <Menu
               onClick={onClick}
               selectedKeys={[current]}
@@ -38,7 +38,7 @@ export const Header = () => {
               className=" flex-1"
               theme={"light"}
             />
-          </div>
+          </div> */}
           <div className="flex items-center">
             <Button
               type="primary"

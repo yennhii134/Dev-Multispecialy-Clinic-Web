@@ -10,40 +10,42 @@ export const Slide = () => {
     navigate("/booking");
   };
 
-  const h1Classes = "text-6xl font-semibold text-blue2 font-banner";
+  const h1Classes = "text-xl md:text-3xl lg:text-6xl font-semibold text-blue2 font-banner";
   return (
     <div>
       <div className="relative">
         <img src={Banner} alt="banner" />
-        <div className=" absolute top-20 left-28 flex flex-col py-12">
+        <div className="absolute top-0 lg:top-20 left-28 flex flex-col py-12">
           <div className="flex flex-col space-y-3">
             <h1 className={h1Classes}>Hệ Thống</h1>
             <h1 className={h1Classes}>Y Tế Được</h1>
             <h1 className={h1Classes}>Tin Tưởng</h1>
             <h1 className={h1Classes}>Ở Việt Nam</h1>
           </div>
-          <div className="mt-10">
+          <div className="max-lg:hidden mt-10">
             <img src={Banner2} alt="banner-2" className="h-20 w-auto" />
           </div>
         </div>
-        <div className="h-32 mx-20">
-          <div className="px-12 py-9 shadow-2xl rounded-3xl -translate-y-16 relative bg-white">
+        <div className="h-20 lg:h-32 mx-20">
+          <div className="px-8 lg:px-12 py-4 md:py-6 lg:py-9 shadow-2xl rounded-3xl -translate-y-4 md:-translate-y-10 lg:-translate-y-16 relative bg-white">
             <div className="flex items-center justify-center">
               <Button
                 type="primary"
-                className="px-16 py-6 mr-3"
+                className="md:px-16 md:py-6 mr-3"
                 onClick={handleBooking}
               >
-                <span className="font-bold text-xl">Đặt lịch hẹn</span>
+                <span className="font-bold text-base lg:text-xl">
+                  Đặt lịch hẹn
+                </span>
               </Button>
-              <Button className="px-16 py-6">
-                <span className="font-bold text-xl">Tra cứu</span>
+              <Button className="md:px-16 md:py-6">
+                <span className="font-bold text-base lg:text-xl">Tra cứu</span>
               </Button>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center gap-2 py-14">
+      <div className="flex flex-col justify-center items-center gap-2 py-14 max-lg:px-10">
         <h1 className="text-3xl max-md:text-2xl text-blue2 font-bold text-center">
           Điểm đến của dịch vụ chăm sóc chất lượng cao
         </h1>
