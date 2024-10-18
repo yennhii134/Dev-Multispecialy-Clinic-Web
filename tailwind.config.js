@@ -9,5 +9,9 @@ export default {
       fontFamily: theme.fontFamily,
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+
+  daisyui: {
+    themes: ["light", "dark", "cupcake"],
+  },
 };
