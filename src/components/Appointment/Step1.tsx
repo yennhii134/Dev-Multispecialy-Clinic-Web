@@ -16,9 +16,9 @@ import { DoctorData } from "@/data/doctor-data";
 import { specialtyData } from "@/data/specialty-data";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { formValuesState, stepState } from "./stores";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
-import { useGetByPhone } from "./hooks/useGetByPhone";
+import { useGetPatientByPhone } from "../../hooks/useGetPatientByPhone";
 
 export const Step1 = ({ form }: { form: any }) => {
   const setStep = useSetRecoilState(stepState);
@@ -29,7 +29,16 @@ export const Step1 = ({ form }: { form: any }) => {
   const [disableHours, setDisableHours] = useState<number[]>([
     0, 1, 2, 3, 4, 5, 6, 19, 20, 21, 22, 23,
   ]);
-  const { patients, setPatients, phone, setPhone } = useGetByPhone();
+  const [phone, setPhone] = useState<string>("");
+  const { patients, setPatients, handleGetPhone } = useGetPatientByPhone();
+
+  useEffect(() => {
+    if (phone) {
+    }
+    if (phone?.length > 9) {
+      handleGetPhone(phone);
+    }
+  }, [phone]);
 
   const disabledDate: RangePickerProps["disabledDate"] = (current) => {
     const today = dayjs().endOf("day");
@@ -92,6 +101,7 @@ export const Step1 = ({ form }: { form: any }) => {
     }
     setStep(2);
   };
+  console.log("formValue in Step1", formValues);
 
   const gridClasses = "grid grid-cols-2 gap-5";
 
@@ -132,9 +142,7 @@ export const Step1 = ({ form }: { form: any }) => {
             options={patients}
             onSelect={onSelect}
             onSearch={(text) => {
-              if (text.length <= 9) {
-                setPatients([]);
-              } else {
+              if (text.match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/)) {
                 setPhone(text);
               }
             }}

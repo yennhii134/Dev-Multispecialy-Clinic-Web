@@ -3,6 +3,7 @@ import { useState } from "react";
 import { screenKey } from "./stores/screenKey";
 import { phoneState } from "./stores";
 import { useRecoilState } from "recoil";
+import { useGetPatientByPhone } from "@/hooks/useGetPatientByPhone";
 
 export const SignUp = ({
   setIsScreen,
@@ -11,8 +12,10 @@ export const SignUp = ({
 }) => {
   const [valueRegister, setValueRegister] = useState("RegisterPatient");
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-
+  const { handleGetPhone } = useGetPatientByPhone();
   const [phone, setPhone] = useRecoilState<string>(phoneState);
+
+  // const [phone, setPhone] = useRecoilState<string>(phoneState);
   const onChange = (e: RadioChangeEvent) => {
     setValueRegister(e.target.value);
   };
@@ -46,13 +49,23 @@ export const SignUp = ({
               </Form.Item>
             ),
             RegisterUserName: (
-              <Form.Item label="Số điện thoại" layout="vertical">
-                <Input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Nhập số điện thoại"
-                />
-              </Form.Item>
+              <>
+                <Form.Item label="Số điện thoại" layout="vertical">
+                  <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Nhập số điện thoại"
+                  />
+                </Form.Item>
+                <Form.Item label="Tên đăng nhập" layout="vertical">
+                  <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    disabled={isDisabled}
+                    placeholder="Tên đăng nhập phải có ít nhất 1 ký tự số và chữ"
+                  />
+                </Form.Item>
+              </>
             ),
           }[valueRegister]
         }

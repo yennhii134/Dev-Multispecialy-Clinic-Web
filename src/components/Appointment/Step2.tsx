@@ -60,6 +60,7 @@ export const Step2 = ({ form }: { form: any }) => {
       navigate("/");
     }
   };
+console.log("formValue in Step2", formValues);
 
   return (
     <>
