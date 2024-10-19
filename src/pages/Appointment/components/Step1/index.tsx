@@ -73,16 +73,14 @@ export const Step1 = ({ form }: { form: any }) => {
   };
 
   const onSelect = (data: string, option: any) => {
-    const phone = data.split(" - ")[1];
-    const { patientInfo } = option;
-    
+
     setFormValues((prev) => ({
       ...prev,
-      phone: patientInfo.phone,
-      fullName: patientInfo.fullName,
-      address: patientInfo.address,
-      gender: patientInfo.gender,
-      dob: patientInfo.dob,
+      phone: option.phone,
+      fullName: option.fullName,
+      address: option.address,
+      gender: option.gender,
+      dob: option.dob,
     }));
   };
 

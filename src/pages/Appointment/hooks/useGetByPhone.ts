@@ -10,11 +10,13 @@ export const useGetByPhone = () => {
   const handleGetPhone = async () => {
     const response = await getByPhone(phone);
     if (response) {
-      const patient = response.map((patient: any) => ({
-        patientInfo: patient,
-        value: `${patient.fullName} - ${patient.phone}`,
-        label: `${patient.fullName} - ${patient.phone}`,
-      }));
+      const patient = response.map((patient: any) => {
+        return {
+          ...patient,
+          value: `${patient.fullName} - ${patient.phone}`,
+          label: `${patient.fullName} - ${patient.phone}`,
+        };
+      });
       setPatients(patient);
     }
   };

@@ -23,7 +23,7 @@ export const Services = () => {
   return (
     <div className="py-12 px-10 bg-[#F0F9FF]">
       <div className="mb-8 text-3xl max-md:text-2xl font-semibold">
-        CÁC DỊCH VỤ Y TẾ <span className="text-blue1 font-semibold">DMC</span>{" "}
+        CÁC DỊCH VỤ Y TẾ <span className="text-blue2 font-semibold">DMC</span>{" "}
         CUNG CẤP{" "}
       </div>
       <div className="grid grid-cols-3 max-md:grid-cols-1 gap-3">

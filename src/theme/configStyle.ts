@@ -21,6 +21,9 @@ export const configStyleContainer = {
         buttonSolidCheckedHoverBg: "var(--blue2)",
         colorPrimary: "var(--blue2)",
       },
+      DatePicker: {
+        colorPrimary: "var(--blue2)",
+      },
     },
   },
 };
