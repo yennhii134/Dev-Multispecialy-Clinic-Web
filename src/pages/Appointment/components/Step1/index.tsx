@@ -2,33 +2,34 @@ import {
   Button,
   DatePicker,
   Form,
-  Input,
   Radio,
   RadioChangeEvent,
   Select,
   TimePicker,
   TimePickerProps,
+  AutoComplete,
 } from "antd";
 import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
 import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
 import { DoctorData } from "@/data/doctor-data";
 import { specialtyData } from "@/data/specialty-data";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { formValuesState, stepState } from "../../stores/states";
 import { useState } from "react";
 import { formatDate } from "@/utils/formatDate";
+import { useGetByPhone } from "../../hooks/useGetByPhone";
 
 export const Step1 = ({ form }: { form: any }) => {
   const setStep = useSetRecoilState(stepState);
-  const setForm = useSetRecoilState(formValuesState);
+  const [formValues, setFormValues] = useRecoilState(formValuesState);
   const [doctors, setDoctors] = useState<
     { label: string; value: string; specialization: string }[]
   >([]);
-  const gridClasses = "grid grid-cols-2 gap-5";
   const [disableHours, setDisableHours] = useState<number[]>([
     0, 1, 2, 3, 4, 5, 6, 19, 20, 21, 22, 23,
   ]);
+  const { patients, setPatients, phone, setPhone } = useGetByPhone();
 
   const disabledDate: RangePickerProps["disabledDate"] = (current) => {
     const today = dayjs().endOf("day");
@@ -46,19 +47,19 @@ export const Step1 = ({ form }: { form: any }) => {
       specialization: doctor.specialization,
     }));
     setDoctors(doctorFilter);
-    setForm((prev) => ({ ...prev, specialty: value }));
+    setFormValues((prev) => ({ ...prev, specialty: value }));
   };
 
   const handleSelectDoctor = (value: string) => {
-    setForm((prev) => ({ ...prev, doctor: value }));
-    form.setFieldsValue({ doctor: value });
+    // setFormValues((prev) => ({ ...prev, doctor: value }));
+    // form.setFieldsValue({ doctor: value });
   };
 
   const handleDateAppointment: DatePickerProps<Dayjs[]>["onChange"] = (
     date,
     dateString
   ) => {
-    setForm((prev) => ({
+    setFormValues((prev) => ({
       ...prev,
       date: formatDate(dateString as string),
     }));
@@ -68,8 +69,34 @@ export const Step1 = ({ form }: { form: any }) => {
     time,
     timeString
   ) => {
-    setForm((prev) => ({ ...prev, time: timeString as string }));
+    setFormValues((prev) => ({ ...prev, time: timeString as string }));
   };
+
+  const onSelect = (data: string, option: any) => {
+    const phone = data.split(" - ")[1];
+    const { patientInfo } = option;
+    
+    setFormValues((prev) => ({
+      ...prev,
+      phone: patientInfo.phone,
+      fullName: patientInfo.fullName,
+      address: patientInfo.address,
+      gender: patientInfo.gender,
+      dob: patientInfo.dob,
+    }));
+  };
+
+  const handleSubmit = () => {
+    if (!formValues.phone) {
+      setFormValues((prev) => ({
+        ...prev,
+        phone: phone,
+      }));
+    }
+    setStep(2);
+  };
+
+  const gridClasses = "grid grid-cols-2 gap-5";
 
   return (
     <>
@@ -77,18 +104,17 @@ export const Step1 = ({ form }: { form: any }) => {
         <Form.Item
           label="Chọn loại dịch vụ khám"
           name="serviceType"
-          initialValue={"inHour"}
+          initialValue={"InHour"}
           required
         >
           <Radio.Group
             buttonStyle="solid"
             onChange={(e: RadioChangeEvent) =>
-              setForm((prev) => ({ ...prev, service: e.target.value }))
+              setFormValues((prev) => ({ ...prev, service: e.target.value }))
             }
           >
-            <Radio.Button value="inHour">Khám Thường</Radio.Button>
-            {/* <Radio.Button value="outOfHour">Khám Vip</Radio.Button> */}
-            <Radio.Button value="outOfHour">Khám Ngoài Giờ</Radio.Button>
+            <Radio.Button value="InHour">Khám Thường</Radio.Button>
+            <Radio.Button value="OutHour">Khám Ngoài Giờ</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -105,11 +131,17 @@ export const Step1 = ({ form }: { form: any }) => {
             },
           ]}
         >
-          <Input
-            placeholder="Nhập số điện thoại"
-            onChange={(e) => {
-              setForm((prev) => ({ ...prev, phone: e.target.value }));
+          <AutoComplete
+            options={patients}
+            onSelect={onSelect}
+            onSearch={(text) => {
+              if (text.length <= 9) {
+                setPatients([]);
+              } else {
+                setPhone(text);
+              }
             }}
+            placeholder="Nhập số điện thoại"
           />
         </Form.Item>
       </div>
@@ -168,13 +200,25 @@ export const Step1 = ({ form }: { form: any }) => {
           maxLength={200}
           placeholder="Nhập tình trạng sức khoẻ của bạn, câu hỏi dành cho bác sĩ và các vấn đề sức khỏe cần khám"
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, description: e.target.value }))
+            setFormValues((prev) => ({ ...prev, symptoms: e.target.value }))
           }
         />
       </Form.Item>
 
       <div className="flex justify-end mt-3">
-        <Button type="primary" className="w-full" onClick={() => setStep(2)}>
+        <Button
+          type="primary"
+          className="w-full"
+          disabled={
+            !formValues.service ||
+            !phone ||
+            !formValues.specialty ||
+            !formValues.date ||
+            !formValues.time ||
+            !formValues.symptoms
+          }
+          onClick={handleSubmit}
+        >
           Tiếp tục
         </Button>
       </div>

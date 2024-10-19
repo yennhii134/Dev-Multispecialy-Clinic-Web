@@ -8,7 +8,7 @@ export const specialtyData = [
     key: "Radiology",
   },
   { label: "Phẫu thuật", value: "Surgery", key: "Surgery" },
-  { label: "Nhi", value: "Pediatrics", key: "Pediatrics" },
+  { label: "Nhi khoa", value: "Pediatrics", key: "Pediatrics" },
   { label: "Tim mạch", value: "Cardiology", key: "Cardiology" },
   { label: "Cơ xương khớp", value: "Orthopedics", key: "Orthopedics" },
   { label: "Tiết niệu", value: "Urology", key: "Urology" },

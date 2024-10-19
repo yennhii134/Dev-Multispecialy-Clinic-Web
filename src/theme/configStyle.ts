@@ -3,29 +3,8 @@ export const configStyleContainer = {
     token: {
       controlHeight: 40,
       fontFamily: "lexend",
+      borderRadius: 16,
     },
-    components: {
-      Button: {
-        colorPrimary: "var(--blue1)",
-        colorPrimaryActive: "var(--blue2)",
-        colorPrimaryHover: "var(--blue1)",
-        colorBorder: "var(--blue2)",
-        defaultBorderColor: "var(--blue1)",
-        defaultColor: "var(--blue2)",
-        borderRadius: 16,
-      },
-      Radio: {
-        buttonSolidCheckedActiveBg: "var(--blue1)",
-        buttonSolidCheckedBg: "var(--blue1)",
-        buttonSolidCheckedHoverBg: "var(--blue1)",
-        colorPrimary: "var(--blue1)",
-      },
-    },
-  },
-};
-
-export const configStyleHome = {
-  theme: {
     components: {
       Button: {
         colorPrimary: "var(--blue2)",
@@ -34,14 +13,13 @@ export const configStyleHome = {
         colorBorder: "var(--blue2)",
         defaultBorderColor: "var(--blue2)",
         defaultColor: "var(--blue2)",
-        borderRadius: 16,
+        borderColorDisabled: "#d9d9d9",
       },
       Radio: {
         buttonSolidCheckedActiveBg: "var(--blue2)",
         buttonSolidCheckedBg: "var(--blue2)",
         buttonSolidCheckedHoverBg: "var(--blue2)",
         colorPrimary: "var(--blue2)",
-        borderRadius: 16,
       },
     },
   },

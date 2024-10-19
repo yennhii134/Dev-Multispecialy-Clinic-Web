@@ -7,22 +7,23 @@ import {
   Radio,
   Select,
 } from "antd";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import { formValuesState, stepState } from "../../stores/states";
 import { useEffect, useState } from "react";
 import { useAddress } from "../../hooks/useAddress";
-import { useAppointment } from "@/hooks/Appointment/useAppointment";
-import toast from "react-hot-toast";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { formatDate } from "@/utils/formatDate";
+import { AppointmentService } from "@/services/Appointment/AppointmentService";
+import { useNavigate } from "react-router-dom";
 
 export const Step2 = ({ form }: { form: any }) => {
   const setStep = useSetRecoilState(stepState);
   const { citys, fetchAddressData, fetchDistrictData } = useAddress();
   const [districts, setDistricts] = useState([]);
-  const { appointment } = useAppointment();
   const [formValues, setFormValues] = useRecoilState(formValuesState);
-  const [isLoading, setIsLoading] = useState(false);
+  const clearFormValue = useResetRecoilState(formValuesState);
+  const { isLoading, loadingType, appointment } = AppointmentService();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAddressData();
@@ -52,26 +53,37 @@ export const Step2 = ({ form }: { form: any }) => {
     }));
   };
   const handleSubmit = async () => {
-    setIsLoading(true);
     const response = await appointment(formValues);
     if (response) {
-      toast.success("Đặt lịch thành công");
+      clearFormValue();
+      setStep(1);
+      navigate("/");
     }
-    setIsLoading(false);
   };
 
   return (
     <>
-      <Form.Item label="Họ và tên" name="name" required>
+      <Form.Item
+        label="Họ và tên"
+        name="name"
+        required
+        initialValue={formValues?.fullName}
+      >
         <Input
           placeholder="Nhập họ và tên"
+          value={formValues?.fullName}
           onChange={(e) => {
-            setFormValues((prev) => ({ ...prev, name: e.target.value }));
+            setFormValues((prev) => ({ ...prev, fullName: e.target.value }));
           }}
         />
       </Form.Item>
       <div className="grid grid-cols-2 gap-5">
-        <Form.Item label="Ngày sinh" name="date" required>
+        <Form.Item
+          label="Ngày sinh"
+          name="date"
+          required
+          initialValue={formValues.dob && dayjs(formValues.dob)}
+        >
           <DatePicker
             format={"DD/MM/YYYY"}
             className="w-full"
@@ -93,43 +105,68 @@ export const Step2 = ({ form }: { form: any }) => {
         </Form.Item>
       </div>
       <div className="flex">
-        <Form.Item label="Giới tính" name="gender" required layout="horizontal">
+        <Form.Item
+          label="Giới tính"
+          name="gender"
+          required
+          layout="horizontal"
+          initialValue={formValues.gender}
+        >
           <Radio.Group
+            value={formValues.gender}
             onChange={(e) => {
               setFormValues((prev) => ({ ...prev, gender: e.target.value }));
             }}
           >
-            <Radio value={1}>Nữ</Radio>
-            <Radio value={0}>Nam</Radio>
+            <Radio value={true}>Nữ</Radio>
+            <Radio value={false}>Nam</Radio>
           </Radio.Group>
         </Form.Item>
       </div>
 
       <div className="grid grid-cols-2 gap-5">
-        <Form.Item label="Tỉnh/Thành phố" name="city" required>
+        <Form.Item
+          label="Tỉnh/Thành phố"
+          name="city"
+          required
+          initialValue={formValues.city}
+        >
           <Select
             showSearch
             placeholder="Chọn tỉnh/thành phố"
             optionFilterProp="label"
             options={citys}
+            value={formValues.city}
             onChange={handleSelectCity}
           ></Select>
         </Form.Item>
-        <Form.Item label="Quận/Huyện" name="district" required>
+        <Form.Item
+          label="Quận/Huyện"
+          name="district"
+          required
+          initialValue={formValues.district}
+        >
           <Select
             showSearch
             placeholder="Chọn quận/huyện"
             optionFilterProp="label"
             options={districts}
+            value={formValues.district}
             onChange={handleDistrictChange}
             notFoundContent="Không tìm thấy quận/huyện"
             allowClear
           ></Select>
         </Form.Item>
       </div>
-      <Form.Item label="Địa chỉ" name="address" required>
+      <Form.Item
+        label="Địa chỉ"
+        name="address"
+        required
+        initialValue={formValues.address}
+      >
         <Input
           placeholder="Nhập địa chỉ"
+          value={formValues.address}
           onChange={(e) => {
             setFormValues((prev) => ({ ...prev, address: e.target.value }));
           }}
@@ -143,7 +180,15 @@ export const Step2 = ({ form }: { form: any }) => {
           type="primary"
           className="w-full"
           onClick={handleSubmit}
-          loading={isLoading}
+          loading={isLoading === loadingType.Appointment}
+          disabled={
+            !formValues.fullName ||
+            !formValues.dob ||
+            formValues.gender === null ||
+            !formValues.city ||
+            !formValues.district ||
+            !formValues.address
+          }
         >
           Đăng ký
         </Button>

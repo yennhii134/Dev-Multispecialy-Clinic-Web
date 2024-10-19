@@ -17,7 +17,7 @@ export default function Appointment() {
       >
         <h1 className="text-2xl font-bold mb-4">
           Đặt lịch thăm khám tại&nbsp;
-          <span className="text-blue1">DMC</span>
+          <span className="text-blue2">DMC</span>
         </h1>
         {
           {
