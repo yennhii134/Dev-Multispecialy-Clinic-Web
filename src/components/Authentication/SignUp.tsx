@@ -1,7 +1,7 @@
 import { Button, Form, Input, Radio, RadioChangeEvent } from "antd";
 import { useState } from "react";
-import { screenKey } from "../screenKey";
-import { phoneState } from "../stores";
+import { screenKey } from "./stores/screenKey";
+import { phoneState } from "./stores";
 import { useRecoilState } from "recoil";
 
 export const SignUp = ({

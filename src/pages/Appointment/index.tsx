@@ -1,8 +1,8 @@
 import { Form } from "antd";
 import bgAppoinment from "@/assets/svg/bg-appointment.svg";
-import { Step1, Step2 } from "./components";
+import { Step1, Step2 } from "@/components/Appointment";
 import { useRecoilValue } from "recoil";
-import { stepState } from "./stores/states";
+import { stepState } from "../../components/Appointment/stores";
 
 export default function Appointment() {
   const step = useRecoilValue(stepState);

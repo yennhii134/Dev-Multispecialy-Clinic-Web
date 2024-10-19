@@ -5,7 +5,7 @@ import { menuData } from "./stores/menu-data";
 import { Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { isModalAuthValue } from "@/stores/isModalAuth";
-import { Authentication } from "@/components/Authentication";
+import { Authentication } from "@/pages/Authentication";
 import Logo from "@/assets/img/logoDMC3.png";
 
 export const Header = () => {

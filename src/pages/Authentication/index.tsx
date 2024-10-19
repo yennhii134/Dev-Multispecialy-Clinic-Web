@@ -1,12 +1,10 @@
 import "./index.scss";
-import { SignIn } from "./components/SignIn";
-import { SignUp } from "./components/SignUp";
-import { OTP } from "./components/OTP";
+import { SignIn, OTP, SignUp } from "@/components/Authentication";
 import { useState } from "react";
 import { Modal } from "antd";
 import { useRecoilState } from "recoil";
 import { isModalAuthValue } from "@/stores/isModalAuth";
-import { screenKey } from "./screenKey";
+import { screenKey } from "@/components/Authentication/stores/screenKey";
 
 export const Authentication = () => {
   const [isScreen, setIsScreen] = useState<string>(screenKey.signIn);

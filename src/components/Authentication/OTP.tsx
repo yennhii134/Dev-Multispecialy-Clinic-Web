@@ -2,7 +2,7 @@ import { Button, Input } from "antd";
 import { useEffect, useState } from "react";
 import bgOtp from "@/assets/svg/bg-otp.svg";
 import { useRecoilValue } from "recoil";
-import { phoneState } from "../stores";
+import { phoneState } from "./stores";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { ConfirmationResult, getAuth, RecaptchaVerifier } from "firebase/auth";
 import { FirebaseService } from "@/services/Firebase.service";

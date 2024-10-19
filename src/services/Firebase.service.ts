@@ -1,4 +1,4 @@
-import { FirebaseErrorCode } from "@/components/Authentication/screenKey";
+import { FirebaseErrorCode } from "@/components/Authentication/stores/screenKey";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import {
   ConfirmationResult,

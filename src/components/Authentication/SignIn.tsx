@@ -1,7 +1,7 @@
 import { Button, Form, Input } from "antd";
 import { TbLockSquareRounded, TbUserCircle } from "react-icons/tb";
 import bgAuthen from "@/assets/svg/bg-auth.svg";
-import { screenKey } from "../screenKey";
+import { screenKey } from "@/components/Authentication/stores/screenKey";
 
 export const SignIn = ({
   setIsScreen,

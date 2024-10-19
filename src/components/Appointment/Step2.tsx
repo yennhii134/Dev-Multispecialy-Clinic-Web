@@ -8,9 +8,9 @@ import {
   Select,
 } from "antd";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
-import { formValuesState, stepState } from "../../stores/states";
+import { formValuesState, stepState } from "./stores";
 import { useEffect, useState } from "react";
-import { useAddress } from "../../hooks/useAddress";
+import { useAddress } from "./hooks/useAddress";
 import dayjs, { Dayjs } from "dayjs";
 import { formatDate } from "@/utils/formatDate";
 import { AppointmentService } from "@/services/Appointment/AppointmentService";

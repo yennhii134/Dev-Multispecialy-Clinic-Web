@@ -15,10 +15,10 @@ import dayjs, { Dayjs } from "dayjs";
 import { DoctorData } from "@/data/doctor-data";
 import { specialtyData } from "@/data/specialty-data";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { formValuesState, stepState } from "../../stores/states";
+import { formValuesState, stepState } from "./stores";
 import { useState } from "react";
 import { formatDate } from "@/utils/formatDate";
-import { useGetByPhone } from "../../hooks/useGetByPhone";
+import { useGetByPhone } from "./hooks/useGetByPhone";
 
 export const Step1 = ({ form }: { form: any }) => {
   const setStep = useSetRecoilState(stepState);
@@ -73,7 +73,6 @@ export const Step1 = ({ form }: { form: any }) => {
   };
 
   const onSelect = (data: string, option: any) => {
-
     setFormValues((prev) => ({
       ...prev,
       phone: option.phone,
