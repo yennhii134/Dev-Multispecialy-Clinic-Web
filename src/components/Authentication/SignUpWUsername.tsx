@@ -13,30 +13,28 @@ import { useRecoilState } from "recoil";
 import { phoneState } from "./stores";
 import { PatientService } from "@/services/Patient/PatientService";
 import { OTP } from "./OTP";
+import toast from "react-hot-toast";
 
 export const SignUpWUsername = () => {
   const [form, setForm] = useState<any>({});
   const [patients, setPatients] = useState<AutoCompleteProps["options"]>([]);
   const { getByPhone } = PatientService();
   const [phone, setPhone] = useRecoilState<string>(phoneState);
-  const { isLoading, typeLoading, signUp } = AuthenService();
+  const { isLoading, typeLoading, checkExistPatient } = AuthenService();
   const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [screenOTP, setScreenOTP] = useState<boolean>(false);
 
-  // const handleSignUp = () => {
-  //   console.log("form", form);
+  const handleSignUp = () => {
+    checkExistPatient(form.patientId).then((response) => {
+      if (response?.status) {
+        setScreenOTP(true);
+      } else {
+        toast.error(response?.data.message_VN);
+      }
+    });
+  };
 
-  //   signUp(form).then((response) => {
-  //     console.log("response handleSignUp", response);
-  //     if (!response?.status) {
-  //       toast.error(response?.data?.message_VN);
-  //     } else {
-  //       toast.success(response.data.message_VN);
-  //       navigate("/");
-  //     }
-  //   });
-  // };
   const handleGetPhone = async (phone: string) => {
     const response = await getByPhone(phone);
     if (response?.status && response?.data.length > 0) {
@@ -283,7 +281,7 @@ export const SignUpWUsername = () => {
             <Button
               type="primary"
               className="w-full"
-              onClick={() => setScreenOTP(true)}
+              onClick={handleSignUp}
               loading={isLoading === typeLoading.signUp}
             >
               Đăng ký

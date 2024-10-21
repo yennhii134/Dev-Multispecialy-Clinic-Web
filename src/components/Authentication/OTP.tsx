@@ -49,63 +49,63 @@ export const OTP = ({ form }: { form: any }) => {
   }, [auth]);
 
   const handleSubmit = async () => {
-    if (!confirmationResult) {
-      try {
-        setIsPending(true);
-        const sendOTP = await FirebaseService.getInstance().sendOTP(
-          form.patient.phone,
-          recaptchaVerifier
-        );
-        setConfirmationResult(sendOTP);
-        setIsPending(false);
-        toast.success("Mã OTP đã được gửi");
-      } catch (error: any) {
-        toast(error.message, {
-          icon: "❌",
-          duration: 5000,
-          style: {
-            border: "1px solid #ff4d4f",
-            boxShadow: "0 0 10px #ff4d4f",
-            borderRadius: "10px",
-            padding: "10px",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          },
-        });
-        setIsPending(false);
-      }
-    } else {
-      try {
-        setIsPending(true);
-        const verify = await FirebaseService.getInstance().confirmOTP(
-          confirmationResult,
-          otp
-        );
-        console.log(verify);
-        setIsPending(false);
-        toast.success("Xác thực thành công");
-        setOtp("");
-        handleSignUp();
-      } catch (error: any) {
-        toast(error.message, {
-          icon: "❌",
-          duration: 5000,
-          style: {
-            border: "1px solid #ff4d4f",
-            boxShadow: "0 0 10px #ff4d4f",
-            borderRadius: "10px",
-            padding: "10px",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          },
-        });
-        setIsPending(false);
-      }
-    }
+    // if (!confirmationResult) {
+    //   try {
+    //     setIsPending(true);
+    //     const sendOTP = await FirebaseService.getInstance().sendOTP(
+    //       form.patient.phone,
+    //       recaptchaVerifier
+    //     );
+    //     setConfirmationResult(sendOTP);
+    //     setIsPending(false);
+    //     toast.success("Mã OTP đã được gửi");
+    //   } catch (error: any) {
+    //     toast(error.message, {
+    //       icon: "❌",
+    //       duration: 5000,
+    //       style: {
+    //         border: "1px solid #ff4d4f",
+    //         boxShadow: "0 0 10px #ff4d4f",
+    //         borderRadius: "10px",
+    //         padding: "10px",
+    //         textAlign: "center",
+    //         display: "flex",
+    //         alignItems: "center",
+    //         justifyContent: "center",
+    //       },
+    //     });
+    //     setIsPending(false);
+    //   }
+    // } else {
+    //   try {
+    //     setIsPending(true);
+    //     const verify = await FirebaseService.getInstance().confirmOTP(
+    //       confirmationResult,
+    //       otp
+    //     );
+    //     console.log(verify);
+    //     setIsPending(false);
+    //     toast.success("Xác thực thành công");
+    //     setOtp("");
+    handleSignUp();
+    //   } catch (error: any) {
+    //     toast(error.message, {
+    //       icon: "❌",
+    //       duration: 5000,
+    //       style: {
+    //         border: "1px solid #ff4d4f",
+    //         boxShadow: "0 0 10px #ff4d4f",
+    //         borderRadius: "10px",
+    //         padding: "10px",
+    //         textAlign: "center",
+    //         display: "flex",
+    //         alignItems: "center",
+    //         justifyContent: "center",
+    //       },
+    //     });
+    //     setIsPending(false);
+    //   }
+    // }
   };
 
   useEffect(() => {
@@ -147,9 +147,7 @@ export const OTP = ({ form }: { form: any }) => {
             <div className="text-sm text-gray2">
               {`Mã OTP đã được gửi đến số điện thoại ${form.patient.phone}`}
             </div>
-            <div>
-              Vui lòng nhập mã OTP
-            </div>
+            <div>Vui lòng nhập mã OTP</div>
           </div>
           <div className="space-y-3">
             <Input.OTP

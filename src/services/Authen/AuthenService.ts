@@ -44,5 +44,20 @@ export const AuthenService = () => {
     }
   };
 
-  return { isLoading, typeLoading, signUp, signIn, logout, checkExistUsername };
+  const checkExistPatient = async (patientId: string) => {
+    return await useApiRequest({
+      apiCall: axiosInstance.get(`/auth/checkExistPatient/${patientId}`),
+      catchError: true,
+    });
+  };
+
+  return {
+    isLoading,
+    typeLoading,
+    signUp,
+    signIn,
+    logout,
+    checkExistUsername,
+    checkExistPatient,
+  };
 };

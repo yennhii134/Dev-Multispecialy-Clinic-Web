@@ -16,15 +16,16 @@ export const SignUpWPatientId = () => {
   const navigate = useNavigate();
   const [screenOTP, setScreenOTP] = useState<boolean>(false);
 
-  // const handleSignUp = () => {
-  //   form.username = patientId;
-  //   signUp(form).then((response) => {
-  //     if (response) {
-  //       toast.success(response.data.data.message_VN);
-  //       navigate("/");
-  //     }
-  //   });
-  // };
+  const handleSignUp = () => {
+    form.username = patientId;
+    setScreenOTP(true);
+    // signUp(form).then((response) => {
+    //   if (response) {
+    //     toast.success(response.data.data.message_VN);
+    //     navigate("/");
+    //   }
+    // });
+  };
 
   const handleGetById = async () => {
     const response = await getById(patientId);
@@ -244,8 +245,8 @@ export const SignUpWPatientId = () => {
           <Button
             type="primary"
             className="w-full"
-            onClick={() => setScreenOTP(true)}
-            // onClick={handleSignUp}
+            // onClick={() => setScreenOTP(true)}
+            onClick={handleSignUp}
             loading={isLoading === typeLoading.signUp}
           >
             Đăng ký
