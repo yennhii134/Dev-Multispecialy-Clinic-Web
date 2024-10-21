@@ -9,28 +9,26 @@ export const AppointmentService = () => {
     Appointment: "Appointment",
   };
   const appointment = async (formValues: any) => {
-    console.log("formValues appointment", formValues);
-    
     const response = await useApiRequest({
       apiCall: axiosInstance.post("appointment", {
         service: formValues.service,
-        // doctor: {
-        //   name: formValues.doctor,
-        //   specialization: formValues.specialization,
-        // },
-        specialty: formValues.specialty,
+        doctor: formValues.doctor,
         date: formValues.date,
         time: formValues.time,
         symptoms: formValues.symptoms,
         patient: {
           fullName: formValues.fullName,
           phone: formValues.phone,
-          address: `${formValues.address} ${formValues.district} ${formValues.city}`,
+          email: formValues.email,
+          address: {
+            city: formValues.address.city,
+            state: formValues.address.state,
+            address: formValues.address.address,
+          },
           gender: formValues.gender,
           dob: formValues.dob,
         },
       }),
-      isToastSuccess: true,
       loadingType: loadingType.Appointment,
       setIsLoading,
     });

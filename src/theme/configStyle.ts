@@ -8,7 +8,7 @@ export const configStyleContainer = {
     components: {
       Button: {
         colorPrimary: "var(--blue2)",
-        colorPrimaryActive: "var(--blue1)",
+        colorPrimaryActive: "var(--blue2)",
         colorPrimaryHover: "var(--blue2)",
         colorBorder: "var(--blue2)",
         defaultBorderColor: "var(--blue2)",

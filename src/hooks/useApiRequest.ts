@@ -1,4 +1,4 @@
-import toast from "react-hot-toast/headless";
+import toast from "react-hot-toast";
 
 export const useApiRequest = async ({
   apiCall,
@@ -22,12 +22,13 @@ export const useApiRequest = async ({
     const response = await apiCall;
     if (response.status) {
       if (isToastSuccess) toast.success(response.data.message);
-      return response.data;
+      return { data: response?.data || {}, status: true };
     }
+
   } catch (error: any) {
-    if (catchError) return error.response.data;
-    if (isToastError) toast.error(error.response.data.message);
-    return;
+    if (catchError) return { data: error?.response?.data || {}, status: false };
+    if (isToastError) toast.error(error.response.data.message_VN);
+
   } finally {
     if (setIsLoading && loadingType) setIsLoading(null);
   }

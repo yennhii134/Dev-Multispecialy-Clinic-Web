@@ -12,5 +12,13 @@ export const PatientService = () => {
     });
   };
 
-  return { getByPhone };
+  const getById = async (id: string) => {
+    const response = await useApiRequest({
+      apiCall: axiosInstance.get(`patient/${id}`),
+      catchError: true,
+    });
+    if (response) return response;
+  };
+
+  return { getByPhone, getById };
 };

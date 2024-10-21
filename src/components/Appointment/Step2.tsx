@@ -33,13 +33,19 @@ export const Step2 = ({ form }: { form: any }) => {
     const data = await fetchDistrictData(value);
     if (data) {
       setDistricts(data);
-      setFormValues((prev) => ({ ...prev, city: option.label }));
+      setFormValues((prev) => ({
+        ...prev,
+        address: { ...prev?.address, city: option.label },
+      }));
       form.setFieldsValue({ district: undefined });
     }
   };
 
   const handleDistrictChange = (value: string, option: any) => {
-    setFormValues((prev) => ({ ...prev, district: option.label }));
+    setFormValues((prev) => ({
+      ...prev,
+      address: { ...prev?.address, state: option.label },
+    }));
     form.setFieldsValue({ district: value });
   };
 
@@ -60,7 +66,7 @@ export const Step2 = ({ form }: { form: any }) => {
       navigate("/");
     }
   };
-console.log("formValue in Step2", formValues);
+  console.log("formValue in Step2", formValues);
 
   return (
     <>
@@ -78,20 +84,8 @@ console.log("formValue in Step2", formValues);
           }}
         />
       </Form.Item>
-      <div className="grid grid-cols-2 gap-5">
-        <Form.Item
-          label="Ngày sinh"
-          name="date"
-          required
-          initialValue={formValues.dob && dayjs(formValues.dob)}
-        >
-          <DatePicker
-            format={"DD/MM/YYYY"}
-            className="w-full"
-            onChange={handleSelectDob}
-          />
-        </Form.Item>
-        <Form.Item
+      <div className="grid grid-cols-2 items-center gap-5">
+        {/* <Form.Item
           label="Email"
           name="email"
           tooltip="Nhập email để nhận được các thông báo về lịch hẹn, tái khám,..."
@@ -103,18 +97,16 @@ console.log("formValue in Step2", formValues);
               setFormValues((prev) => ({ ...prev, email: e.target.value }));
             }}
           />
-        </Form.Item>
-      </div>
-      <div className="flex">
+        </Form.Item> */}
         <Form.Item
           label="Giới tính"
           name="gender"
           required
           layout="horizontal"
-          initialValue={formValues.gender}
+          initialValue={formValues?.gender}
         >
           <Radio.Group
-            value={formValues.gender}
+            value={formValues?.gender}
             onChange={(e) => {
               setFormValues((prev) => ({ ...prev, gender: e.target.value }));
             }}
@@ -123,6 +115,18 @@ console.log("formValue in Step2", formValues);
             <Radio value={false}>Nam</Radio>
           </Radio.Group>
         </Form.Item>
+        <Form.Item
+          label="Ngày sinh"
+          name="date"
+          required
+          initialValue={formValues?.dob && dayjs(formValues.dob)}
+        >
+          <DatePicker
+            format={"DD/MM/YYYY"}
+            className="w-full"
+            onChange={handleSelectDob}
+          />
+        </Form.Item>
       </div>
 
       <div className="grid grid-cols-2 gap-5">
@@ -130,14 +134,14 @@ console.log("formValue in Step2", formValues);
           label="Tỉnh/Thành phố"
           name="city"
           required
-          initialValue={formValues.city}
+          initialValue={formValues?.address?.city}
         >
           <Select
             showSearch
             placeholder="Chọn tỉnh/thành phố"
             optionFilterProp="label"
             options={citys}
-            value={formValues.city}
+            value={formValues?.address?.city}
             onChange={handleSelectCity}
           ></Select>
         </Form.Item>
@@ -145,14 +149,14 @@ console.log("formValue in Step2", formValues);
           label="Quận/Huyện"
           name="district"
           required
-          initialValue={formValues.district}
+          initialValue={formValues?.address?.state}
         >
           <Select
             showSearch
             placeholder="Chọn quận/huyện"
             optionFilterProp="label"
             options={districts}
-            value={formValues.district}
+            value={formValues?.address?.state}
             onChange={handleDistrictChange}
             notFoundContent="Không tìm thấy quận/huyện"
             allowClear
@@ -163,13 +167,16 @@ console.log("formValue in Step2", formValues);
         label="Địa chỉ"
         name="address"
         required
-        initialValue={formValues.address}
+        initialValue={formValues?.address?.address}
       >
         <Input
           placeholder="Nhập địa chỉ"
-          value={formValues.address}
+          value={formValues?.address?.address}
           onChange={(e) => {
-            setFormValues((prev) => ({ ...prev, address: e.target.value }));
+            setFormValues((prev) => ({
+              ...prev,
+              address: { ...prev?.address, address: e.target.value },
+            }));
           }}
         />
       </Form.Item>
@@ -183,11 +190,9 @@ console.log("formValue in Step2", formValues);
           onClick={handleSubmit}
           loading={isLoading === loadingType.Appointment}
           disabled={
-            !formValues.fullName ||
+            !formValues?.fullName ||
             !formValues.dob ||
             formValues.gender === null ||
-            !formValues.city ||
-            !formValues.district ||
             !formValues.address
           }
         >

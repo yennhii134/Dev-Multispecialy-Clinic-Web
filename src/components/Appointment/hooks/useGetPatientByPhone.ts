@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PatientService } from "@/services/Patient/PatientService";
 import { AutoCompleteProps } from "antd";
 
@@ -10,10 +10,11 @@ export const useGetPatientByPhone = () => {
     const response = await getByPhone(phone);
     if (response) {
       const patient = response.map((patient: any) => {
+        const dob = new Date(patient.dob).toLocaleDateString("en-GB");
         return {
           ...patient,
-          value: `${patient.fullName} - ${patient.phone}`,
-          label: `${patient.fullName} - ${patient.phone}`,
+          value: `${patient.fullName} - ${patient.phone} - ${dob}`,
+          label: `${patient.fullName} - ${patient.phone} - ${dob}`,
         };
       });
       setPatients(patient);

@@ -12,33 +12,36 @@ import {
 import { DatePickerProps, RangePickerProps } from "antd/es/date-picker";
 import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
-import { DoctorData } from "@/data/doctor-data";
-import { specialtyData } from "@/data/specialty-data";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { formValuesState, stepState } from "./stores";
 import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
-import { useGetPatientByPhone } from "../../hooks/useGetPatientByPhone";
+import { useGetPatientByPhone } from "@/components/Appointment/hooks/useGetPatientByPhone";
+import { Service } from "@/types/Appointment";
+import { useGetSpecializations } from "@/hooks/Doctor/useGetSpecializations";
+import { useGetDoctorBySpecialization } from "@/hooks/Doctor/useGetDoctorBySpecialization";
 
 export const Step1 = ({ form }: { form: any }) => {
   const setStep = useSetRecoilState(stepState);
   const [formValues, setFormValues] = useRecoilState(formValuesState);
-  const [doctors, setDoctors] = useState<
-    { label: string; value: string; specialization: string }[]
-  >([]);
-  const [disableHours, setDisableHours] = useState<number[]>([
-    0, 1, 2, 3, 4, 5, 6, 19, 20, 21, 22, 23,
-  ]);
+  const disableHours = [0, 1, 2, 3, 4, 5, 6, 19, 20, 21, 22, 23];
   const [phone, setPhone] = useState<string>("");
-  const { patients, setPatients, handleGetPhone } = useGetPatientByPhone();
+  const { patients, handleGetPhone } = useGetPatientByPhone();
+  const { specializations } = useGetSpecializations();
+  const { doctor, fetchDoctorBySpecialization } =
+    useGetDoctorBySpecialization();
 
   useEffect(() => {
-    if (phone) {
-    }
     if (phone?.length > 9) {
       handleGetPhone(phone);
     }
   }, [phone]);
+
+  useEffect(() => {
+    if (formValues?.doctor?.specialization) {
+      fetchDoctorBySpecialization(formValues?.doctor?.specialization);
+    }
+  }, [formValues?.doctor?.specialization]);
 
   const disabledDate: RangePickerProps["disabledDate"] = (current) => {
     const today = dayjs().endOf("day");
@@ -48,24 +51,30 @@ export const Step1 = ({ form }: { form: any }) => {
 
   const handleSelectSpecialty = (value: string) => {
     form.setFieldsValue({ doctor: undefined });
-    const doctorFilter = DoctorData.filter((doctor) => {
-      return doctor.specialization === value;
-    }).map((doctor) => ({
-      label: doctor.lable,
-      value: doctor.value,
-      specialization: doctor.specialization,
+
+    setFormValues((prev) => ({
+      ...prev,
+      doctor: {
+        ...prev?.doctor,
+        specialization: value,
+        doctor: undefined,
+      },
     }));
-    setDoctors(doctorFilter);
-    setFormValues((prev) => ({ ...prev, specialty: value }));
   };
 
   const handleSelectDoctor = (value: string) => {
-    // setFormValues((prev) => ({ ...prev, doctor: value }));
-    // form.setFieldsValue({ doctor: value });
+    setFormValues((prev) => ({
+      ...prev,
+      doctor: {
+        ...prev?.doctor,
+        doctor: value,
+      },
+    }));
+    form.setFieldsValue({ doctor: value });
   };
 
   const handleDateAppointment: DatePickerProps<Dayjs[]>["onChange"] = (
-    date,
+    _date,
     dateString
   ) => {
     setFormValues((prev) => ({
@@ -75,25 +84,25 @@ export const Step1 = ({ form }: { form: any }) => {
   };
 
   const handleTimeAppointment: TimePickerProps["onChange"] = (
-    time,
+    _time,
     timeString
   ) => {
     setFormValues((prev) => ({ ...prev, time: timeString as string }));
   };
 
-  const onSelect = (data: string, option: any) => {
+  const onSelect = (_data: string, option: any) => {
     setFormValues((prev) => ({
       ...prev,
       phone: option.phone,
       fullName: option.fullName,
-      address: option.address,
       gender: option.gender,
       dob: option.dob,
+      address: option.address,
     }));
   };
 
   const handleSubmit = () => {
-    if (!formValues.phone) {
+    if (!formValues?.phone) {
       setFormValues((prev) => ({
         ...prev,
         phone: phone,
@@ -101,7 +110,6 @@ export const Step1 = ({ form }: { form: any }) => {
     }
     setStep(2);
   };
-  console.log("formValue in Step1", formValues);
 
   const gridClasses = "grid grid-cols-2 gap-5";
 
@@ -111,7 +119,7 @@ export const Step1 = ({ form }: { form: any }) => {
         <Form.Item
           label="Chọn loại dịch vụ khám"
           name="serviceType"
-          initialValue={"InHour"}
+          initialValue={Service.InHour}
           required
         >
           <Radio.Group
@@ -120,8 +128,8 @@ export const Step1 = ({ form }: { form: any }) => {
               setFormValues((prev) => ({ ...prev, service: e.target.value }))
             }
           >
-            <Radio.Button value="InHour">Khám Thường</Radio.Button>
-            <Radio.Button value="OutHour">Khám Ngoài Giờ</Radio.Button>
+            <Radio.Button value={Service.InHour}>Khám Thường</Radio.Button>
+            <Radio.Button value={Service.OutHour}>Khám Ngoài Giờ</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
@@ -143,6 +151,7 @@ export const Step1 = ({ form }: { form: any }) => {
             onSelect={onSelect}
             onSearch={(text) => {
               if (text.match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/)) {
+                setFormValues((prev) => ({ ...prev, phone: text }));
                 setPhone(text);
               }
             }}
@@ -157,7 +166,7 @@ export const Step1 = ({ form }: { form: any }) => {
             showSearch
             placeholder="Chọn chuyên khoa"
             optionFilterProp="label"
-            options={specialtyData}
+            options={specializations}
             onChange={handleSelectSpecialty}
           ></Select>
         </Form.Item>
@@ -166,7 +175,7 @@ export const Step1 = ({ form }: { form: any }) => {
             showSearch
             placeholder="Chọn bác sĩ"
             optionFilterProp="label"
-            options={doctors}
+            options={doctor}
             onChange={handleSelectDoctor}
           ></Select>
         </Form.Item>
@@ -215,9 +224,9 @@ export const Step1 = ({ form }: { form: any }) => {
           type="primary"
           className="w-full"
           disabled={
-            !formValues.service ||
-            !phone ||
-            !formValues.specialty ||
+            !formValues?.service ||
+            !formValues.phone ||
+            !formValues.doctor ||
             !formValues.date ||
             !formValues.time ||
             !formValues.symptoms

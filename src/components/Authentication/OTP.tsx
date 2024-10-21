@@ -7,6 +7,8 @@ import { getApp, getApps, initializeApp } from "firebase/app";
 import { ConfirmationResult, getAuth, RecaptchaVerifier } from "firebase/auth";
 import { FirebaseService } from "@/services/Firebase.service";
 import toast from "react-hot-toast";
+import { AuthenService } from "@/services/Authen/AuthenService";
+import { useNavigate } from "react-router-dom";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -19,10 +21,13 @@ const firebaseConfig = {
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
-export const OTP = () => {
+export const OTP = ({ form }: { form: any }) => {
   const [timeLeft, setTimeLeft] = useState<number>(10);
   const [otp, setOtp] = useState<string>("");
-  const phone = useRecoilValue<string>(phoneState);
+  // const phone = useRecoilValue<string>(phoneState);
+  const { isLoading, typeLoading, signUp } = AuthenService();
+  const navigate = useNavigate();
+  console.log("phone", form.patient.phone);
 
   const [recaptchaVerifier, setRecaptchaVerifier] =
     useState<RecaptchaVerifier | null>(null);
@@ -48,7 +53,7 @@ export const OTP = () => {
       try {
         setIsPending(true);
         const sendOTP = await FirebaseService.getInstance().sendOTP(
-          phone,
+          form.patient.phone,
           recaptchaVerifier
         );
         setConfirmationResult(sendOTP);
@@ -82,6 +87,7 @@ export const OTP = () => {
         setIsPending(false);
         toast.success("Xác thực thành công");
         setOtp("");
+        handleSignUp();
       } catch (error: any) {
         toast(error.message, {
           icon: "❌",
@@ -116,6 +122,20 @@ export const OTP = () => {
     setTimeLeft(10);
   };
 
+  const handleSignUp = () => {
+    console.log("form", form);
+
+    signUp(form).then((response) => {
+      console.log("response handleSignUp", response);
+      if (!response?.status) {
+        toast.error(response?.data?.message_VN);
+      } else {
+        toast.success(response.data.message_VN);
+        navigate("/");
+      }
+    });
+  };
+
   return (
     <>
       <div className="w-full gap-10 flex items-center justify-between py-4">
@@ -125,10 +145,10 @@ export const OTP = () => {
               XÁC THỰC OTP
             </h1>
             <div className="text-sm text-gray2">
-              {`Mã OTP đã được gửi đến số điện thoại của bạn: ${phone}`}
+              {`Mã OTP đã được gửi đến số điện thoại ${form.patient.phone}`}
             </div>
             <div>
-              Vui lòng nhập mã OTP đã được gửi đến số điện thoại của bạn
+              Vui lòng nhập mã OTP
             </div>
           </div>
           <div className="space-y-3">
