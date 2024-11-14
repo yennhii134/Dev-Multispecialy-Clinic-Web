@@ -8,8 +8,8 @@ export const useGetSpecializations = () => {
   useEffect(() => {
     const fetchSpecializations = async () => {
       const response = await getSpecializations();
-      if (response) {
-        const data = response.map((specialization: any) => {
+      if (response?.status) {
+        const data = response.data.map((specialization: any) => {
           return {
             ...specialization,
             label: specialization.name,

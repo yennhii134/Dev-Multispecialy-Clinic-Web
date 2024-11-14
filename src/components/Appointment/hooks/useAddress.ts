@@ -8,6 +8,8 @@ export const useAddress = () => {
       await fetch("https://esgoo.net/api-tinhthanh/1/0.htm")
         .then((res) => res.json())
         .then((data) => {
+          console.log("data", data);
+          
           const cityData = data.data.map((item: any) => ({
             value: item.id,
             label: item.name,

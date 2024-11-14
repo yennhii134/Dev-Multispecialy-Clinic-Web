@@ -1,6 +1,6 @@
 import "./index.scss";
 import { Button, Dropdown, MenuProps } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/assets/img/logoDMC3.png";
 import { useRecoilValue } from "recoil";
 import { userValue } from "@/stores/user";
@@ -10,8 +10,10 @@ import { AuthenService } from "@/services/Authen/AuthenService";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useRecoilValue(userValue);
   const { logout } = AuthenService();
+  const isScreenAuth = location.pathname.includes("/auth");
 
   const handleLogout = () => {
     logout();
@@ -44,13 +46,17 @@ export const Header = () => {
               </div>
             </Dropdown>
           ) : (
-            <Button
-              type="primary"
-              className="px-6 py-[10px] rounded-2xl"
-              onClick={() => navigate("/auth")}
-            >
-              Đăng nhập / Đăng ký
-            </Button>
+            <>
+              {!isScreenAuth && (
+                <Button
+                  type="primary"
+                  className="px-6 py-[10px] rounded-2xl"
+                  onClick={() => navigate("/auth")}
+                >
+                  Đăng nhập / Đăng ký
+                </Button>
+              )}
+            </>
           )}
         </div>
       </div>

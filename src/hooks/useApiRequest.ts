@@ -27,7 +27,7 @@ export const useApiRequest = async ({
 
   } catch (error: any) {
     if (catchError) return { data: error?.response?.data || {}, status: false };
-    if (isToastError) toast.error(error.response.data.message_VN);
+    if (isToastError) toast.error(error.response.data.message);
 
   } finally {
     if (setIsLoading && loadingType) setIsLoading(null);

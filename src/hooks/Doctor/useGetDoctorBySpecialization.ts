@@ -7,8 +7,8 @@ export const useGetDoctorBySpecialization = () => {
 
   const fetchDoctorBySpecialization = async (specialization: string) => {
     const response = await getDoctorBySpecialization(specialization);
-    if (response) {
-      const data = response.map((doctor: any) => {
+    if (response?.status) {
+      const data = response.data.map((doctor: any) => {
         return {
           ...doctor,
           label: doctor.fullName,

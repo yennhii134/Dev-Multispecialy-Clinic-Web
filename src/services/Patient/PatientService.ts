@@ -4,11 +4,8 @@ import { useApiRequest } from "@/hooks/useApiRequest";
 export const PatientService = () => {
   const getByPhone = async (phone: string) => {
     return useApiRequest({
-      apiCall: axiosInstance.get("patient", {
-        params: {
-          phone,
-        },
-      }),
+      apiCall: axiosInstance.get(`patient/findByPhone/${phone}`),
+      catchError: true,
     });
   };
 

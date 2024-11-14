@@ -111,7 +111,8 @@ export const Step1 = ({ form }: { form: any }) => {
     setStep(2);
   };
 
-  const gridClasses = "grid grid-cols-2 gap-5";
+  const gridClasses =
+    "flex flex-col lg:grid lg:grid-cols-2 lg:items-center lg:gap-5";
 
   return (
     <>

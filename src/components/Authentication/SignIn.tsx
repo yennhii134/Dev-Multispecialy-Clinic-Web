@@ -32,66 +32,55 @@ export const SignIn = ({
   };
 
   return (
-    <div className="flex justify-between gap-2 w-full">
-      <div className="flex flex-col flex-1 space-y-10">
-        <h1 className="text-3xl font-bold text-blue2 font-logo text-center">
-          ĐĂNG NHẬP
-        </h1>
-        <Form
-          form={form}
-          className="flex flex-col"
-          layout="vertical"
-          onFinish={handleSignIn}
+    <div className="flex flex-col space-y-10 bg-white shadow-lg p-10 rounded-xl h-fit">
+      <h1 className="text-3xl font-semibold text-blue2 font-logo text-center">
+        Đăng nhập
+      </h1>
+      <Form
+        form={form}
+        className="flex flex-col"
+        layout="vertical"
+        onFinish={handleSignIn}
+      >
+        <Form.Item
+          name="username"
+          label={<div className="font-medium">Tên đăng nhập/Mã bệnh nhân</div>}
         >
-          <Form.Item
-            name="username"
-            label={
-              <div className="font-medium">Tên đăng nhập/mã bệnh nhân</div>
-            }
+          <Input
+            allowClear
+            placeholder="Nhập tên đăng nhập hoặc mã bệnh nhân"
+            prefix={<TbUserCircle className="text-base text-blue2" />}
+          />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          label={<div className="font-medium">Mật khẩu</div>}
+        >
+          <Input.Password
+            allowClear
+            placeholder="Nhập mật khẩu"
+            prefix={<TbLockSquareRounded className="text-base text-blue2" />}
+          />
+        </Form.Item>
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={isLoading === typeLoading.signIn}
+        >
+          Đăng nhập
+        </Button>
+      </Form>
+      <div className="flex justify-between sm:gap-10 max-sm:flex-col">
+        <div>
+          Chưa có tài khoản?
+          <i
+            className="text-blue2 cursor-pointer ml-1"
+            onClick={() => setIsScreen(screenKey.signUp)}
           >
-            <Input
-              allowClear
-              placeholder="Nhập tên đăng nhập hoặc mã bệnh nhân"
-              prefix={<TbUserCircle className="text-base text-blue2" />}
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            label={<div className="font-medium">Mật khẩu</div>}
-          >
-            <Input.Password
-              allowClear
-              placeholder="Nhập mật khẩu"
-              prefix={<TbLockSquareRounded className="text-base text-blue2" />}
-            />
-          </Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={isLoading === typeLoading.signIn}
-          >
-            Đăng nhập
-          </Button>
-        </Form>
-        <div className="flex justify-between max-sm:flex-col">
-          <div>
-            Chưa có tài khoản?
-            <i
-              className="text-blue2 cursor-pointer ml-1"
-              onClick={() => setIsScreen(screenKey.signUp)}
-            >
-              Đăng ký
-            </i>
-          </div>
-          <i className="text-blue2 cursor-pointer">Quên mật khẩu?</i>
+            Đăng ký
+          </i>
         </div>
-      </div>
-      <div className="max-sm:hidden flex items-center">
-        <img
-          src={bgAuthen}
-          alt="bg-signup"
-          className="size-64 object-contain"
-        />
+        <i className="text-blue2 cursor-pointer">Quên mật khẩu?</i>
       </div>
     </div>
   );

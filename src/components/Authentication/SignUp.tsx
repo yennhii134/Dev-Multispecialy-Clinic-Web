@@ -3,8 +3,6 @@ import { useState } from "react";
 import { screenKey } from "./stores/screenKey";
 import { SignUpWPatientId } from "./SignUpWPatientId";
 import { SignUpWUsername } from "./SignUpWUsername";
-import { useSetRecoilState } from "recoil";
-import { phoneState } from "./stores";
 
 export const SignUp = ({
   setIsScreen,
@@ -12,17 +10,15 @@ export const SignUp = ({
   setIsScreen: (value: string) => void;
 }) => {
   const [valueRegister, setValueRegister] = useState("RegisterPatient");
-  const setPhone = useSetRecoilState<string>(phoneState);
 
   const onChange = (e: RadioChangeEvent) => {
-    setPhone("");
     setValueRegister(e.target.value);
   };
 
   return (
-    <div className="sign-up-wrapper space-y-4 w-full py-4">
-      <h1 className="text-3xl font-bold text-blue2 font-logo text-center">
-        ĐĂNG KÝ
+    <div className="sign-up-wrapper space-y-4 p-6 max-w-[980px] bg-white shadow-xl rounded-lg w-full h-fit">
+      <h1 className="text-3xl font-semibold text-blue2 font-logo text-center">
+        Đăng ký
       </h1>
       <div className="flex items-center justify-center">
         <Radio.Group
@@ -42,8 +38,8 @@ export const SignUp = ({
       <div className="space-y-4">
         {
           {
-            RegisterPatient: <SignUpWPatientId />,
-            RegisterUserName: <SignUpWUsername />,
+            RegisterPatient: <SignUpWPatientId setIsScreen={setIsScreen} />,
+            RegisterUserName: <SignUpWUsername setIsScreen={setIsScreen} />,
           }[valueRegister]
         }
       </div>

@@ -50,7 +50,7 @@ export const Step2 = ({ form }: { form: any }) => {
   };
 
   const handleSelectDob: DatePickerProps<Dayjs[]>["onChange"] = (
-    date,
+    _date,
     dateString
   ) => {
     setFormValues((prev) => ({
@@ -67,6 +67,10 @@ export const Step2 = ({ form }: { form: any }) => {
     }
   };
   console.log("formValue in Step2", formValues);
+  console.log("citys", citys);
+
+  const gridClasses =
+    "flex flex-col lg:grid lg:grid-cols-2 lg:items-center lg:gap-5";
 
   return (
     <>
@@ -75,6 +79,7 @@ export const Step2 = ({ form }: { form: any }) => {
         name="name"
         required
         initialValue={formValues?.fullName}
+        rules={[{ required: true, message: "Họ và tên không được để trống" }]}
       >
         <Input
           placeholder="Nhập họ và tên"
@@ -84,26 +89,14 @@ export const Step2 = ({ form }: { form: any }) => {
           }}
         />
       </Form.Item>
-      <div className="grid grid-cols-2 items-center gap-5">
-        {/* <Form.Item
-          label="Email"
-          name="email"
-          tooltip="Nhập email để nhận được các thông báo về lịch hẹn, tái khám,..."
-          rules={[{ type: "email", message: "Email không hợp lệ" }]}
-        >
-          <Input
-            placeholder="Nhập email"
-            onChange={(e) => {
-              setFormValues((prev) => ({ ...prev, email: e.target.value }));
-            }}
-          />
-        </Form.Item> */}
+      <div className={gridClasses}>
         <Form.Item
           label="Giới tính"
           name="gender"
           required
-          layout="horizontal"
+          layout="vertical"
           initialValue={formValues?.gender}
+          rules={[{ required: true, message: "Vui lòng chọn giới tính" }]}
         >
           <Radio.Group
             value={formValues?.gender}
@@ -129,7 +122,7 @@ export const Step2 = ({ form }: { form: any }) => {
         </Form.Item>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className={gridClasses}>
         <Form.Item
           label="Tỉnh/Thành phố"
           name="city"
@@ -168,6 +161,7 @@ export const Step2 = ({ form }: { form: any }) => {
         name="address"
         required
         initialValue={formValues?.address?.address}
+        rules={[{ required: true, message: "Địa chỉ không được để trống" }]}
       >
         <Input
           placeholder="Nhập địa chỉ"
@@ -180,10 +174,10 @@ export const Step2 = ({ form }: { form: any }) => {
           }}
         />
       </Form.Item>
-      <div className="grid grid-cols-2 gap-5">
-        <Button className="w-full" onClick={() => setStep(1)}>
+      <div className="grid grid-cols-1 gap-5">
+        {/* <Button className="w-full" onClick={() => setStep(1)}>
           Quay lại
-        </Button>
+        </Button> */}
         <Button
           type="primary"
           className="w-full"

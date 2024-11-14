@@ -10,7 +10,8 @@ export const Slide = () => {
     navigate("/booking");
   };
 
-  const h1Classes = "text-xl md:text-3xl lg:text-6xl font-semibold text-blue2 font-banner";
+  const h1Classes =
+    "text-xl md:text-3xl lg:text-6xl font-semibold text-blue2 font-banner";
   return (
     <div>
       <div className="relative">

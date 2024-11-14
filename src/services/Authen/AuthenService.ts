@@ -14,7 +14,7 @@ export const AuthenService = () => {
 
   const signUp = async (data: any) => {
     return await useApiRequest({
-      apiCall: axiosInstance.post("/auth/patientRegister", data),
+      apiCall: axiosInstance.post("/auth/register-patient", data),
       catchError: true,
       loadingType: typeLoading.signUp,
       setIsLoading: setIsLoading,
@@ -36,17 +36,15 @@ export const AuthenService = () => {
   };
 
   const checkExistUsername = async (username: string) => {
-    const respone = await useApiRequest({
-      apiCall: axiosInstance.get(`/auth/checkExist/${username}`),
+    return await useApiRequest({
+      apiCall: axiosInstance.get(`/auth/check-username/${username}`),
+      catchError: true,
     });
-    if (respone?.status) {
-      return respone.data;
-    }
   };
 
-  const checkExistPatient = async (patientId: string) => {
+  const checkPatiendId = async (patientId: string) => {
     return await useApiRequest({
-      apiCall: axiosInstance.get(`/auth/checkExistPatient/${patientId}`),
+      apiCall: axiosInstance.get(`/auth/check-patientId/${patientId}`),
       catchError: true,
     });
   };
@@ -58,6 +56,6 @@ export const AuthenService = () => {
     signIn,
     logout,
     checkExistUsername,
-    checkExistPatient,
+    checkPatiendId,
   };
 };

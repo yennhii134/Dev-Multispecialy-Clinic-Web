@@ -1,3 +1,5 @@
+import { CSSProperties } from "react";
+
 export const configStyleContainer = {
   theme: {
     token: {
@@ -26,4 +28,13 @@ export const configStyleContainer = {
       },
     },
   },
+};
+
+export const styleToast: CSSProperties = {
+  borderRadius: "10px",
+  padding: "10px",
+  textAlign: "center",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 };

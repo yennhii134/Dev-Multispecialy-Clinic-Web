@@ -6,7 +6,12 @@ export default {
   theme: {
     extend: {
       colors: theme.colors,
-      fontFamily: theme.fontFamily,
+      fontFamily: {
+        roboto: ["roboto", "sans-serif", "ui-sans-serif", "system-ui"],
+        logo: ["Kanit", "sans-serif"],
+        norge: ["Playwrite NO"],
+        lexend: ["Lexend", "sans-serif"],
+      },
     },
   },
   plugins: [require("daisyui")],

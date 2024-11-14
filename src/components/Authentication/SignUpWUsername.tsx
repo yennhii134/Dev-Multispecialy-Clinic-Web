@@ -1,131 +1,132 @@
-import { AuthenService } from "@/services/Authen/AuthenService";
 import {
   AutoComplete,
   AutoCompleteProps,
   Button,
+  ConfigProvider,
   Form,
   Input,
   Radio,
 } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { phoneState } from "./stores";
 import { PatientService } from "@/services/Patient/PatientService";
-import { OTP } from "./OTP";
+import { configDisabledNoData, congfigDisabledData } from "./configTheme";
+import { formatDobFromServer } from "@/utils/formatDate";
+import { useRecoilState } from "recoil";
+import { formValue } from "./stores";
+import { screenKey } from "./stores/screenKey";
+import { AuthenService } from "@/services/Authen/AuthenService";
 import toast from "react-hot-toast";
 
-export const SignUpWUsername = () => {
-  const [form, setForm] = useState<any>({});
+export const SignUpWUsername = ({
+  setIsScreen,
+}: {
+  setIsScreen: (value: string) => void;
+}) => {
+  const [form, setForm] = useRecoilState(formValue);
   const [patients, setPatients] = useState<AutoCompleteProps["options"]>([]);
   const { getByPhone } = PatientService();
-  const [phone, setPhone] = useRecoilState<string>(phoneState);
-  const { isLoading, typeLoading, checkExistPatient } = AuthenService();
-  const navigate = useNavigate();
+  const { checkExistUsername } = AuthenService();
+  const [phone, setPhone] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const [screenOTP, setScreenOTP] = useState<boolean>(false);
-
-  const handleSignUp = () => {
-    checkExistPatient(form.patientId).then((response) => {
-      if (response?.status) {
-        setScreenOTP(true);
-      } else {
-        toast.error(response?.data.message_VN);
-      }
-    });
-  };
+  const [errorPhone, setErrorPhone] = useState<string>("");
 
   const handleGetPhone = async (phone: string) => {
     const response = await getByPhone(phone);
+
     if (response?.status && response?.data.length > 0) {
-      const patient = response.data.map((patient: any, index: number) => {
-        const dob = new Date(patient.dob).toLocaleDateString("en-GB");
+      const patient = response.data.map((patient: any) => {
         return {
           ...patient,
-          key: index,
-          value: patient.phone,
-          label: `${patient.fullName} - ${patient.phone} - ${dob}`,
+          key: patient.patientId,
+          value: patient.patientId,
+          label: `${patient.patientId} - ${patient.fullName} - ${
+            patient.gender ? "Nam" : "Nữ"
+          } - ${formatDobFromServer(patient.dob)} - ${patient.address.city}`,
         };
       });
       setPatients(patient);
+    } else {
+      setErrorPhone("Số điện thoại không tồn tại");
     }
   };
 
-  const onSelectPatientByPhone = (_data: string, option: any) => {
+  const onSelectPatientByPhone = (value: string, option: any) => {
+    const phoneByPatient = patients?.find(
+      (patient) => patient.patientId === value
+    );
+    setPhone(phoneByPatient?.phone);
+    if (option.accountId) {
+      setForm({});
+      setErrorPhone("Số điện thoại đã đăng ký");
+      return;
+    }
+    setErrorPhone("");
     setForm({
       ...form,
-      patientId: option.patientId,
-      patient: {
-        fullName: option.fullName,
-        phone: option.phone,
-        gender: option.gender,
-        dob: option.dob,
-        address: {
-          address: option?.address?.address,
-          state: option?.address?.state,
-          city: option?.address?.city,
-        },
-      },
+      patient: option,
     });
   };
   useEffect(() => {
     setForm({});
     setPatients([]);
+    setErrorPhone("");
     setIsDisabled(true);
-    if (phone.length > 9) {
+
+    if (phone && phone.toString().length > 9) {
       handleGetPhone(phone);
-      setForm({
-        ...form,
-        patient: {
-          ...form.patient,
-          phone: phone,
-        },
-      });
       setIsDisabled(false);
     }
   }, [phone]);
 
-  //   const handleSearch = (value: string) => {
-  //     if (value.match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/)) {
-  //       setPhone(value);
-  //     }
-  //   };
+  const handleSignUp = async () => {
+    if (!form.username) return;
+    const response = await checkExistUsername(form.username);
+    if (!response?.status) {
+      toast.error(response?.data.message);
+      return;
+    }
+    setIsScreen(screenKey.otp);
+  };
 
   return (
-    <>
-      {screenOTP ? (
-        <OTP form={form} />
-      ) : (
-        <Form layout="vertical">
-          <div className="space-y-4">
-            <Form.Item
-              label="Số điện thoại"
-              required
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập số điện thoại",
-                },
-                {
-                  pattern: new RegExp(/(84|0[3|5|7|8|9])+([0-9]{8})\b/),
-                  message: "Số điện thoại không hợp lệ",
-                },
-              ]}
-              layout="vertical"
-            >
-              <AutoComplete
-                options={form?.patient?.fullName ? [] : patients}
-                onSelect={onSelectPatientByPhone}
-                // onSearch={handleSearch}
-                value={phone}
-                onChange={(value) => setPhone(value)}
-                placeholder="Nhập số điện thoại"
-              />
-            </Form.Item>
+    <ConfigProvider
+      theme={
+        isDisabled ? configDisabledNoData.theme : congfigDisabledData.theme
+      }
+    >
+      <Form layout="vertical">
+        <div className="space-y-4">
+          <Form.Item
+            label="Số điện thoại"
+            required
+            help={errorPhone}
+            validateStatus={errorPhone ? "error" : "success"}
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập số điện thoại",
+              },
+              {
+                pattern: new RegExp(/(84|0[3|5|7|8|9])+([0-9]{8})\b/),
+                message: "Số điện thoại không hợp lệ",
+              },
+            ]}
+            layout="vertical"
+          >
+            <AutoComplete
+              options={patients}
+              onSelect={onSelectPatientByPhone}
+              value={phone}
+              onChange={(value) => setPhone(value)}
+              placeholder="Nhập số điện thoại"
+            />
+          </Form.Item>
+          <div className="grid grid-cols-2 gap-10">
             <Form.Item
               label="Tên đăng nhập"
               layout="vertical"
               name="username"
+              className="col-span-1"
               rules={[
                 {
                   required: true,
@@ -146,87 +147,12 @@ export const SignUpWUsername = () => {
                     username: e.target.value,
                   })
                 }
-                disabled={isDisabled}
                 placeholder="Tên đăng nhập phải có ít nhất 1 ký tự số và chữ"
               />
             </Form.Item>
-            <Form.Item label="Họ và tên" layout="vertical" required>
+            <Form.Item label="Email" layout="vertical" className="col-span-1">
               <Input
-                disabled={isDisabled}
-                value={form?.patient?.fullName}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    patient: {
-                      ...form.patient,
-                      fullName: e.target.value,
-                    },
-                  })
-                }
-              />
-            </Form.Item>
-            <div className="grid grid-cols-2 gap-5 items-center">
-              <Form.Item
-                label="Giới tính"
-                required
-                layout="horizontal"
-                initialValue={form?.patient?.gender}
-              >
-                <Radio.Group
-                  value={form?.patient?.gender}
-                  onChange={(e) => {
-                    setForm({
-                      ...form,
-                      patient: {
-                        ...form.patient,
-                        gender: e.target.value,
-                      },
-                    });
-                  }}
-                >
-                  <Radio value={true}>Nữ</Radio>
-                  <Radio value={false}>Nam</Radio>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="Ngày sinh" layout="vertical" required>
-                <Input
-                  disabled={isDisabled}
-                  value={form?.patient?.dob}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      patient: {
-                        ...form.patient,
-                        dob: e.target.value,
-                      },
-                    })
-                  }
-                />
-              </Form.Item>
-            </div>
-            <Form.Item label="Địa chỉ" layout="vertical" required>
-              <Input
-                disabled={isDisabled}
-                value={
-                  form.patient?.address?.address &&
-                  `${form?.patient?.address?.address} - ${form?.patient.address?.state} - ${form?.patient?.address?.city}`
-                }
-                // onChange={(e) =>
-                //   setForm({
-                //     ...form,
-                //     patient: {
-                //       ...form.patient,
-                //       address: e.target.value,
-                //     }
-                //   })
-                // }
-              />
-            </Form.Item>
-
-            <Form.Item label="Email" layout="vertical" required>
-              <Input
-                disabled={isDisabled}
-                value={form?.email}
+                value={form?.patient?.email}
                 onChange={(e) =>
                   setForm({
                     ...form,
@@ -235,10 +161,58 @@ export const SignUpWUsername = () => {
                 }
               />
             </Form.Item>
-
-            <Form.Item label="Mật khẩu" layout="vertical" required>
+          </div>
+          <div className="grid grid-cols-2 gap-5 items-center">
+            <Form.Item
+              label="Họ và tên"
+              layout="vertical"
+              required
+              className="col-span-1"
+            >
+              <Input disabled={true} value={form?.patient?.fullName} />
+            </Form.Item>
+            <Form.Item label="Ngày sinh" layout="vertical" required>
+              <Input
+                disabled={true}
+                value={formatDobFromServer(form?.patient?.dob)}
+              />
+            </Form.Item>
+          </div>
+          <div className="grid grid-cols-2 gap-5 items-center">
+            <Form.Item
+              label="Giới tính"
+              required
+              layout="horizontal"
+              initialValue={form?.patient?.gender}
+            >
+              <Radio.Group value={form?.patient?.gender} disabled={true}>
+                <Radio value={true}>Nữ</Radio>
+                <Radio value={false}>Nam</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item
+              label="Địa chỉ"
+              layout="vertical"
+              required
+              className="col-span-1"
+            >
+              <Input
+                disabled={true}
+                value={
+                  form.patient?.address?.address &&
+                  `${form?.patient?.address?.address} - ${form?.patient.address?.state} - ${form?.patient?.address?.city}`
+                }
+              />
+            </Form.Item>
+          </div>
+          <div className="grid grid-cols-2 gap-10">
+            <Form.Item
+              label="Mật khẩu"
+              layout="vertical"
+              required
+              className="col-span-1"
+            >
               <Input.Password
-                disabled={isDisabled}
                 value={form.password}
                 onChange={(e) =>
                   setForm({
@@ -252,6 +226,7 @@ export const SignUpWUsername = () => {
               label="Xác nhận mật khẩu"
               layout="vertical"
               required
+              className="col-span-1"
               // rules={[
               //   {
               //     required: true,
@@ -268,27 +243,34 @@ export const SignUpWUsername = () => {
               // ]}
             >
               <Input.Password
-                disabled={isDisabled}
-                value={form.confirmValue}
+                value={form.confirmPassword}
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    confirmValue: e.target.value,
+                    confirmPassword: e.target.value,
                   })
                 }
               />
             </Form.Item>
+          </div>
+          <div className="flex justify-center w-full pt-2">
             <Button
               type="primary"
-              className="w-full"
+              className="w-2/3"
               onClick={handleSignUp}
-              loading={isLoading === typeLoading.signUp}
+              disabled={
+                isDisabled ||
+                !form.username ||
+                !form.password ||
+                !form.confirmPassword ||
+                form.password !== form.confirmPassword
+              }
             >
               Đăng ký
             </Button>
           </div>
-        </Form>
-      )}
-    </>
+        </div>
+      </Form>
+    </ConfigProvider>
   );
 };
