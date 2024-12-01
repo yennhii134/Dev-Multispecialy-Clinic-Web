@@ -21,7 +21,7 @@ export const PatientRecord = () => {
 
   useEffect(() => {
     fetchMedicalRecord();
-  }, []);
+  }, [user]);
 
   return (
     <div className="p-6 bg-white rounded-lg">
