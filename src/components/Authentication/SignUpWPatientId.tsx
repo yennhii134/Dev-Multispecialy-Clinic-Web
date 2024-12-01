@@ -21,9 +21,10 @@ export const SignUpWPatientId = ({
 
   const handleGetById = async (patient: Patient) => {
     if (!patientId) return;
+    let patientUpperCase = patientId.toUpperCase();
     setForm({
       ...form,
-      username: patientId,
+      username: patientUpperCase,
       patient: patient,
     });
     setIsDisabled(false);
@@ -37,13 +38,15 @@ export const SignUpWPatientId = ({
 
   useEffect(() => {
     if (patientId.length > 4) {
-      const isValidPatientId = /^PAT\d{2,}$/.test(patientId);
+      let patientUpperCase = patientId.toUpperCase();
+
+      const isValidPatientId = /^PAT\d{2,}$/.test(patientUpperCase);
 
       if (!isValidPatientId) {
         setError("Mã bệnh nhân không hợp lệ");
         return;
       }
-      checkPatiendId(patientId).then((response) => {
+      checkPatiendId(patientUpperCase).then((response) => {
         if (!response?.status) {
           handleSetFields(response?.data.message);
         } else {

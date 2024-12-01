@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { formValue, Service } from "@/types/Appointment";
+import { formValue, Service } from "@/components/Appointment/type";
 
 export const stepState = atom({
   key: "stepState",

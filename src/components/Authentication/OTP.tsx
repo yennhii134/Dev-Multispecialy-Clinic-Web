@@ -1,6 +1,5 @@
 import { Button, Input } from "antd";
 import { useEffect, useState } from "react";
-import bgOtp from "@/assets/svg/bg-otp.svg";
 import { useRecoilValue } from "recoil";
 import { formValue } from "./stores";
 import { getApp, getApps, initializeApp } from "firebase/app";
@@ -50,39 +49,39 @@ export const OTP = () => {
   }, [auth]);
 
   const handleSubmit = async () => {
-    if (!confirmationResult && form?.patient?.phone) {
-      try {
-        setIsPending(true);
-        const sendOTP = await FirebaseService.getInstance().sendOTP(
-          form?.patient?.phone,
-          recaptchaVerifier
-        );
-        setConfirmationResult(sendOTP);
-        setIsPending(false);
-        toast.success("Mã OTP đã được gửi");
-      } catch (error: any) {
-        toast.error(error.message);
-        setIsPending(false);
-      }
-    } else {
-      try {
-        setIsPending(true);
-        if (confirmationResult) {
-          const verify = await FirebaseService.getInstance().confirmOTP(
-            confirmationResult,
-            otp
-          );
-          console.log("verify", verify);
-          setIsPending(false);
-          toast.success("Xác thực thành công");
-          setOtp("");
+    // if (!confirmationResult && form?.patient?.phone) {
+    //   try {
+    //     setIsPending(true);
+    //     const sendOTP = await FirebaseService.getInstance().sendOTP(
+    //       form?.patient?.phone,
+    //       recaptchaVerifier
+    //     );
+    //     setConfirmationResult(sendOTP);
+    //     setIsPending(false);
+    //     toast.success("Mã OTP đã được gửi");
+    //   } catch (error: any) {
+    //     toast.error(error.message);
+    //     setIsPending(false);
+    //   }
+    // } else {
+    //   try {
+    //     setIsPending(true);
+    //     if (confirmationResult) {
+    //       const verify = await FirebaseService.getInstance().confirmOTP(
+    //         confirmationResult,
+    //         otp
+    //       );
+    //       console.log("verify", verify);
+    //       setIsPending(false);
+    //       toast.success("Xác thực thành công");
+    //       setOtp("");
           handleSignUp();
-        }
-      } catch (error: any) {
-        toast.error(error.message);
-        setIsPending(false);
-      }
-    }
+    //     }
+    //   } catch (error: any) {
+    //     toast.error(error.message);
+    //     setIsPending(false);
+    //   }
+    // }
   };
 
   useEffect(() => {
