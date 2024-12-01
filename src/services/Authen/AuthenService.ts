@@ -1,8 +1,6 @@
 import { useApiRequest } from "@/hooks/useApiRequest";
 import { axiosInstance } from "@/api/axiosInstance";
 import { useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { userValue } from "@/stores/user";
 
 export const AuthenService = () => {
   const [isLoading, setIsLoading] = useState<string | null>(null);
@@ -10,7 +8,6 @@ export const AuthenService = () => {
     signUp = "signUp",
     signIn = "signIn",
   }
-  const setUser = useSetRecoilState(userValue);
 
   const signUp = async (data: any) => {
     return await useApiRequest({
@@ -30,11 +27,6 @@ export const AuthenService = () => {
     });
   };
 
-  const logout = async () => {
-    setUser(null);
-    localStorage.removeItem("access_token");
-  };
-
   const checkExistUsername = async (username: string) => {
     return await useApiRequest({
       apiCall: axiosInstance.get(`/auth/check-username/${username}`),
@@ -49,13 +41,20 @@ export const AuthenService = () => {
     });
   };
 
+  const getProfile = async () => {
+    return await useApiRequest({
+      apiCall: axiosInstance.get("/auth/profile"),
+      catchError: true,
+    });
+  };
+
   return {
     isLoading,
     typeLoading,
     signUp,
     signIn,
-    logout,
     checkExistUsername,
     checkPatiendId,
+    getProfile,
   };
 };

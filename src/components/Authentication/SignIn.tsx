@@ -1,12 +1,10 @@
 import { Button, Form, Input } from "antd";
 import { TbLockSquareRounded, TbUserCircle } from "react-icons/tb";
-import bgAuthen from "@/assets/svg/bg-auth.svg";
 import { screenKey } from "@/components/Authentication/stores/screenKey";
 import { AuthenService } from "@/services/Authen/AuthenService";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { userValue } from "@/stores/user";
+import { useAuthContext } from "@/context/AuthContext";
 
 export const SignIn = ({
   setIsScreen,
@@ -15,19 +13,19 @@ export const SignIn = ({
 }) => {
   const { isLoading, typeLoading, signIn } = AuthenService();
   const [form] = Form.useForm();
-  const setUser = useSetRecoilState(userValue);
+  const { setAccessToken } = useAuthContext();
+
   const navigate = useNavigate();
 
   const handleSignIn = async (values: any) => {
+    values.username = values.username.toUpperCase();
     const response = await signIn(values);
-    console.log("response", response);
     if (response?.status === false) {
       toast.error("Sai tên đăng nhập hoặc mật khẩu");
     } else {
+      setAccessToken(response?.data?.access_token);
       toast.success("Đăng nhập thành công");
-      localStorage.setItem("access_token", response?.data.access_token);
-      // setUser(response);
-      // navigate("/");
+      navigate("/");
     }
   };
 

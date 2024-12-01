@@ -15,7 +15,7 @@ export const Slide = () => {
   return (
     <div>
       <div className="relative">
-        <img src={Banner} alt="banner" />
+        <img src={Banner} alt="banner" className="object-contain w-full"/>
         <div className="absolute top-0 lg:top-20 left-28 flex flex-col py-12">
           <div className="flex flex-col space-y-3">
             <h1 className={h1Classes}>Hệ Thống</h1>

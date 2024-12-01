@@ -1,11 +1,10 @@
 import { Form } from "antd";
-import bgAppoinment from "@/assets/svg/bg-appointment.svg";
 import appointmentScheduler from "@/assets/img/appointmentScheduler.png";
 import { Step1, Step2 } from "@/components/Appointment";
 import { useRecoilValue } from "recoil";
 import { stepState } from "@/components/Appointment/stores";
 
-export default function Appointment() {
+export const Appointment = () => {
   const step = useRecoilValue(stepState);
   const [form] = Form.useForm();
   return (
@@ -36,4 +35,4 @@ export default function Appointment() {
       </div>
     </div>
   );
-}
+};

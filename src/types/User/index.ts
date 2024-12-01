@@ -1,6 +1,7 @@
-export type User = {
-  access_token: string;
-};
+export interface User extends Patient {
+  email?: string;
+  username?: string;
+}
 
 export interface Patient {
   id?: number;

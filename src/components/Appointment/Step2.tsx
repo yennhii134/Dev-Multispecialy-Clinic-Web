@@ -66,8 +66,6 @@ export const Step2 = ({ form }: { form: any }) => {
       navigate("/");
     }
   };
-  console.log("formValue in Step2", formValues);
-  console.log("citys", citys);
 
   const gridClasses =
     "flex flex-col lg:grid lg:grid-cols-2 lg:items-center lg:gap-5";
@@ -190,7 +188,7 @@ export const Step2 = ({ form }: { form: any }) => {
             !formValues.address
           }
         >
-          Đăng ký
+          Đặt lịch
         </Button>
       </div>
     </>

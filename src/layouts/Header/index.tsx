@@ -1,50 +1,53 @@
 import "./index.scss";
-import { Button, Dropdown, MenuProps } from "antd";
+import { Button } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/assets/img/logoDMC3.png";
 import { useRecoilValue } from "recoil";
 import { userValue } from "@/stores/user";
 import { FaUserCircle } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
-import { AuthenService } from "@/services/Authen/AuthenService";
+import { useAuthContext } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const user = useRecoilValue(userValue);
-  const { logout } = AuthenService();
   const isScreenAuth = location.pathname.includes("/auth");
+  const { setAccessToken } = useAuthContext();
+
+  console.log("user", user);
 
   const handleLogout = () => {
-    logout();
+    setAccessToken(null);
     navigate("/");
+    toast.success("Đăng xuất thành công");
   };
-
-  const items: MenuProps["items"] = [
-    {
-      key: "logout",
-      label: (
-        <div className="flex items-center gap-2" onClick={handleLogout}>
-          <IoLogOutOutline className="text-blue2 text-2xl" />
-          Đăng xuất
-        </div>
-      ),
-    },
-  ];
 
   return (
     <div className="header-wrapper bg-white fixed top-0 left-0 z-50 w-full">
-      <div className="w-full flex items-center justify-between px-20 space-x-4 ">
+      <div className="w-full flex items-center justify-between pl-20 pr-10 space-x-4 ">
         <Link to="/" className="flex items-center">
           <img src={Logo} alt="logo" className="size-24 object-cover mx-3" />
         </Link>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           {user ? (
-            <Dropdown menu={{ items }} placement="bottom">
-              <div className="flex items-center space-x-4">
-                <FaUserCircle className="text-blue2 text-2xl" />
+            <>
+              <div
+                className="flex items-center gap-2 bg-primary-500 py-2 px-3 rounded-xl text-white cursor-pointer"
+                onClick={() => navigate("/patient-record")}
+              >
+                <FaUserCircle className="text-2xl" />
+                <span>Tra cứu hồ sơ bệnh án</span>
               </div>
-            </Dropdown>
+              <div
+                className="flex items-center gap-2  py-2 px-3 border border-primary-500 rounded-xl text-primary-500 cursor-pointer"
+                onClick={handleLogout}
+              >
+                <IoLogOutOutline className="text-2xl" />
+                <span>Đăng xuất</span>
+              </div>
+            </>
           ) : (
             <>
               {!isScreenAuth && (

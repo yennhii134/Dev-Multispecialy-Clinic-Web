@@ -17,7 +17,7 @@ import { formValuesState, stepState } from "./stores";
 import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { useGetPatientByPhone } from "@/components/Appointment/hooks/useGetPatientByPhone";
-import { Service } from "@/types/Appointment";
+import { Service } from "@/components/Appointment/type";
 import { useGetSpecializations } from "@/hooks/Doctor/useGetSpecializations";
 import { useGetDoctorBySpecialization } from "@/hooks/Doctor/useGetDoctorBySpecialization";
 
