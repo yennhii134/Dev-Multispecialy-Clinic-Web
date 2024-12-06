@@ -50,6 +50,7 @@ export const SignUpWPatientId = ({
         if (!response?.status) {
           handleSetFields(response?.data.message);
         } else {
+          handleSetFields("");
           handleGetById(response.data);
         }
       });
@@ -126,7 +127,17 @@ export const SignUpWPatientId = ({
           </Form.Item>
         </Form>
       </ConfigProvider>
-      <Form.Item label="Email" layout="vertical" className="col-span-1">
+      <Form.Item
+        label="Email"
+        layout="vertical"
+        className="col-span-1"
+        rules={[
+          {
+            type: "email",
+            message: "Email không hợp lệ",
+          },
+        ]}
+      >
         <Input
           value={form?.patient?.email}
           onChange={(e) =>

@@ -8,6 +8,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useAuthContext } from "@/context/AuthContext";
 import toast from "react-hot-toast";
+import { EditFilled } from "@ant-design/icons";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -15,8 +16,6 @@ export const Header = () => {
   const user = useRecoilValue(userValue);
   const isScreenAuth = location.pathname.includes("/auth");
   const { setAccessToken } = useAuthContext();
-
-  console.log("user", user);
 
   const handleLogout = () => {
     setAccessToken(null);
@@ -38,14 +37,21 @@ export const Header = () => {
                 onClick={() => navigate("/patient-record")}
               >
                 <FaUserCircle className="text-2xl" />
-                <span>Tra cứu hồ sơ bệnh án</span>
+                <span className="max-lg:hidden">Tra cứu hồ sơ bệnh án</span>
+              </div>
+              <div
+                className="flex items-center gap-2 bg-primary-500 py-2 px-3 rounded-xl text-white cursor-pointer"
+                onClick={() => navigate("patient-info")}
+              >
+                <EditFilled className="text-2xl" />
+                <span className="max-lg:hidden">Chỉnh sửa thông tin</span>
               </div>
               <div
                 className="flex items-center gap-2  py-2 px-3 border border-primary-500 rounded-xl text-primary-500 cursor-pointer"
                 onClick={handleLogout}
               >
                 <IoLogOutOutline className="text-2xl" />
-                <span>Đăng xuất</span>
+                <span className="max-lg:hidden">Đăng xuất</span>
               </div>
             </>
           ) : (

@@ -10,7 +10,7 @@ import {
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import { formValuesState, stepState } from "./stores";
 import { useEffect, useState } from "react";
-import { useAddress } from "./hooks/useAddress";
+import { useAddress } from "../../hooks/useAddress";
 import dayjs, { Dayjs } from "dayjs";
 import { formatDate } from "@/utils/formatDate";
 import { AppointmentService } from "@/services/Appointment/AppointmentService";
@@ -29,7 +29,7 @@ export const Step2 = ({ form }: { form: any }) => {
     fetchAddressData();
   }, []);
 
-  const handleSelectCity = async (value: string, option: any) => {
+  const handleSelectCity = async (value: string, option: any) => {    
     const data = await fetchDistrictData(value);
     if (data) {
       setDistricts(data);

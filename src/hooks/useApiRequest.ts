@@ -16,7 +16,6 @@ export const useApiRequest = async ({
   catchError?: boolean;
 }) => {
   if (setIsLoading && loadingType) setIsLoading(loadingType);
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
 
   try {
     const response = await apiCall;
@@ -24,11 +23,9 @@ export const useApiRequest = async ({
       if (isToastSuccess) toast.success(response.data.message);
       return { data: response?.data || {}, status: true };
     }
-
   } catch (error: any) {
     if (catchError) return { data: error?.response?.data || {}, status: false };
     if (isToastError) toast.error(error.response.data.message);
-
   } finally {
     if (setIsLoading && loadingType) setIsLoading(null);
   }

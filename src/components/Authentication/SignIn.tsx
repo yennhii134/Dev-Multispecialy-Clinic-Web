@@ -19,6 +19,7 @@ export const SignIn = ({
 
   const handleSignIn = async (values: any) => {
     values.username = values.username.toUpperCase();
+
     const response = await signIn(values);
     if (response?.status === false) {
       toast.error("Sai tên đăng nhập hoặc mật khẩu");

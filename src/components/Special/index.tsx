@@ -3,6 +3,7 @@ import Special2 from "@/assets/img/special2.png";
 import Special3 from "@/assets/img/special3.png";
 import Special4 from "@/assets/img/special4.png";
 import Special5 from "@/assets/img/special5.png";
+import SpacialDaLieu from "@/assets/img/special-da-lieu.jpg";
 import { FaLongArrowAltRight } from "react-icons/fa";
 
 export const Special = () => {
@@ -31,8 +32,8 @@ export const Special = () => {
             </div>
           </div>
           <ColImage image={Special1} title="Tim mạch" />
-          <ColImage image={Special2} title="Nội tổng quát" />
-          <ColImage image={Special3} title="Sản phụ" />
+          <ColImage image={Special2} title="Phẩu thuật" />
+          <ColImage image={SpacialDaLieu} title="Da liễu" />
           <ColImage image={Special4} title="Chấn thương chỉnh hình" />
           <ColImage image={Special5} title="Nhi khoa" />
         </div>

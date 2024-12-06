@@ -26,11 +26,11 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     console.log("error", error);
-    if (error.response.status === 401) {
-      console.log("Clearing local storage");
-      localStorage.clear();
-      window.location.reload();
-    }
+    // if (error.response.status === 401) {
+    //   console.log("Clearing local storage");
+    //   localStorage.clear();
+    //   window.location.reload();
+    // }
     return Promise.reject(error);
   }
 );

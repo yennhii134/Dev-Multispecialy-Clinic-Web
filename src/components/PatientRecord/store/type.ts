@@ -10,6 +10,9 @@ export interface LabDetail {
   range: string;
   value: number;
   status: string;
+  description?: string;
+  notes?: string;
+  recommendations?: string;
 }
 
 export interface LabTest {
@@ -42,8 +45,9 @@ export interface Entry {
   doctor: Doctor;
   visitDate: string;
   diagnosis: string | null;
-  treatmentPlan: string | null;
+  treatmentPlan: string;
   medicalInformation: string | null;
+  note: string;
   labRequests: LabTest[];
 }
 
@@ -58,15 +62,12 @@ export interface Patient {
   gender: boolean;
 }
 
-export interface PatientData {
+export interface PatientRecordProps {
   id: number;
   patient: Patient;
   notes: string;
-  entries: Entry[];
-}
 
-export interface PatientRecordProps {
-  data: PatientData;
+  entries: Entry[];
 }
 
 export interface IRowDetail {

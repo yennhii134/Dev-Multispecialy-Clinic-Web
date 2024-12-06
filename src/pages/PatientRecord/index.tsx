@@ -1,27 +1,49 @@
 import { RowDetail } from "@/components/PatientRecord/RowDetail";
-import { patientRecords } from "@/components/PatientRecord/store/data";
 import { TestList } from "@/components/PatientRecord/TestList";
 import { PatientService } from "@/services/Patient/PatientService";
 import { userValue } from "@/stores/user";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import {
+  Entry,
+  PatientRecordProps,
+} from "@/components/PatientRecord/store/type";
+import { DatePicker, Pagination } from "antd";
 
 export const PatientRecord = () => {
-  //   const { patient, notes, entries } = patientRecords[0].data;
   const user = useRecoilValue(userValue);
   const { getMedicalRecord } = PatientService();
-  const [patientRecord, setPatientRecord] = useState<any>();
+  const [patientRecord, setPatientRecord] = useState<PatientRecordProps>();
+  const [dateRange, setDateRange] = useState<string[]>();
+  const [recordFilter, setRecordFilter] = useState<Entry[]>([]);
 
   const fetchMedicalRecord = async () => {
     if (user?.patientId) {
       const response = await getMedicalRecord(user.patientId);
-      if (response?.data.data) setPatientRecord(response?.data.data);
+      if (response?.data.data) {
+        setPatientRecord(response?.data.data);
+        setRecordFilter(response?.data.data.entries);
+      }
     }
   };
 
   useEffect(() => {
     fetchMedicalRecord();
   }, [user]);
+
+  useEffect(() => {
+    if (dateRange && dateRange[0] !== "" && dateRange[1] !== "") {
+      const filteredEntries = patientRecord?.entries.filter((entry) => {
+        return (
+          new Date(entry.visitDate) >= new Date(dateRange[0]) &&
+          new Date(entry.visitDate) <= new Date(dateRange[1])
+        );
+      });
+      setRecordFilter(filteredEntries || []);
+    } else {
+      setRecordFilter(patientRecord?.entries || []);
+    }
+  }, [dateRange]);
 
   return (
     <div className="p-6 bg-white rounded-lg">
@@ -32,7 +54,6 @@ export const PatientRecord = () => {
       </div>
       {patientRecord ? (
         <div className="space-y-6">
-          {/* Patient Information */}
           <div className="border p-4 rounded-xl space-y-1">
             <h2 className="text-xl font-semibold">Thông tin bệnh nhân</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
@@ -60,16 +81,32 @@ export const PatientRecord = () => {
             </div>
           </div>
 
-          {/* Notes */}
           <div className="border p-4 rounded-xl space-y-1">
             <h2 className="text-xl font-semibold">Ghi chú</h2>
             <p>{patientRecord?.notes}</p>
           </div>
 
-          {/* Entries */}
           <div className="border p-4 rounded-xl space-y-1">
-            <h2 className="text-xl font-semibold">Lịch sử khám bệnh</h2>
-            <TestList entries={patientRecord?.entries} />
+            <div className="flex justify-between">
+              <div className="flex gap-2 items-center">
+                <div className="text-base font-semibold">Lọc theo ngày</div>
+                <DatePicker.RangePicker
+                  className="w-[220px]"
+                  onChange={(_value, dateString) => {
+                    setDateRange(dateString);
+                  }}
+                />
+              </div>
+              <div>
+                <Pagination
+                  defaultCurrent={1}
+                  total={recordFilter.length}
+                  pageSize={5}
+                  showSizeChanger={false}
+                />
+              </div>
+            </div>
+            <TestList entries={recordFilter} />
           </div>
         </div>
       ) : (

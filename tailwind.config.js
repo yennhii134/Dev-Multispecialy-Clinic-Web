@@ -1,4 +1,4 @@
-import { theme } from "./src/theme/theme";
+import { theme } from "./src/css/theme";
 /** @type {import('tailwindcss').Config} */
 
 export default {
@@ -20,3 +20,4 @@ export default {
     themes: ["light", "dark", "cupcake"],
   },
 };
+
