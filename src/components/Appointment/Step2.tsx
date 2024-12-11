@@ -78,6 +78,8 @@ export const Step2 = ({ form }: { form: any }) => {
 
   return (
     <>
+      <div className={gridClasses}>
+
       <Form.Item
         label="Họ và tên"
         name="name"
@@ -96,6 +98,25 @@ export const Step2 = ({ form }: { form: any }) => {
           }}
         />
       </Form.Item>
+      <Form.Item
+        label="Email"
+        name="email"
+        required
+        initialValue={formValues?.patient?.email}
+        // rules={[{ required: true, message: "Họ và tên không được để trống" }]}
+      >
+        <Input
+          placeholder="Nhập email"
+          value={formValues?.patient?.email}
+          onChange={(e) => {
+            setFormValues((prev) => ({
+              ...prev,
+              patient: { ...prev?.patient, email: e.target.value },
+            }));
+          }}
+        />
+      </Form.Item>
+      </div>
       <div className={gridClasses}>
         <Form.Item
           label="Giới tính"
@@ -106,7 +127,7 @@ export const Step2 = ({ form }: { form: any }) => {
           rules={[{ required: true, message: "Vui lòng chọn giới tính" }]}
         >
           <Radio.Group
-            value={formValues?.patient?.gender}
+            value={!formValues?.patient?.gender}
             onChange={(e) => {
               setFormValues((prev) => ({
                 ...prev,
