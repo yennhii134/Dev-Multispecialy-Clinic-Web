@@ -7,6 +7,7 @@ import { ConfirmationResult, getAuth, RecaptchaVerifier } from "firebase/auth";
 import toast from "react-hot-toast";
 import { AuthenService } from "@/services/Authen/AuthenService";
 import { useNavigate } from "react-router-dom";
+import { FirebaseService } from "@/services/Firebase.service";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -25,13 +26,12 @@ export const OTP = () => {
   const { isLoading, typeLoading, signUp } = AuthenService();
   const navigate = useNavigate();
   const form = useRecoilValue(formValue);
-  console.log("form", form);
+  const [isPeding, setIsPending] = useState<boolean>(false);
 
-  const [_recaptchaVerifier, setRecaptchaVerifier] =
+  const [recaptchaVerifier, setRecaptchaVerifier] =
     useState<RecaptchaVerifier | null>(null);
-  const [confirmationResult, _setConfirmationResult] =
+  const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult>();
-  const [isPeding, _setIsPending] = useState<boolean>(false);
 
   useEffect(() => {
     const recaptchaVerifier = new RecaptchaVerifier(

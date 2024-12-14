@@ -39,9 +39,9 @@ export const Slide = () => {
                   Đặt lịch hẹn
                 </span>
               </Button>
-              <Button className="md:px-16 md:py-6">
+              {/* <Button className="md:px-16 md:py-6">
                 <span className="font-bold text-base lg:text-xl">Tra cứu</span>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

@@ -25,9 +25,13 @@ export const Header = () => {
 
   return (
     <div className="header-wrapper bg-white fixed top-0 left-0 z-50 w-full">
-      <div className="w-full flex items-center justify-between pl-20 pr-10 space-x-4 ">
+      <div className="w-full flex items-center justify-between pl-12 md:pl-20 pr-8 md:pr-10 space-x-4 ">
         <Link to="/" className="flex items-center">
-          <img src={Logo} alt="logo" className="size-24 object-cover mx-3" />
+          <img
+            src={Logo}
+            alt="logo"
+            className="size-20 md:size-24 object-cover mx-3"
+          />
         </Link>
         <div className="flex items-center gap-2">
           {user ? (

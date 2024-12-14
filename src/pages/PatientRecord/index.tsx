@@ -15,8 +15,9 @@ export const PatientRecord = () => {
   const user = useRecoilValue(userValue);
   const { getMedicalRecord } = PatientService();
   const [patientRecord, setPatientRecord] = useState<PatientRecordProps>();
-  const [dateRange, setDateRange] = useState<string[]>();
+  const [filteredRecords, setFilteredRecords] = useState<Entry[]>([]);
   const [recordFilter, setRecordFilter] = useState<Entry[]>([]);
+  const [dateRange, setDateRange] = useState<string[]>();
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const fetchMedicalRecord = async () => {
@@ -24,7 +25,7 @@ export const PatientRecord = () => {
       const response = await getMedicalRecord(user.patientId);
       if (response?.data.data) {
         setPatientRecord(response?.data.data);
-        setRecordFilter(response?.data.data.entries);
+        setFilteredRecords(response?.data.data.entries);
       }
     }
   };
@@ -41,24 +42,23 @@ export const PatientRecord = () => {
         const visitDate = parseISO(entry.visitDate);
         return isWithinInterval(visitDate, { start: startDate, end: endDate });
       });
-      setRecordFilter(filteredEntries || []);
+      setFilteredRecords(filteredEntries || []);
     } else {
-      setRecordFilter(patientRecord?.entries || []);
+      setFilteredRecords(patientRecord?.entries || []);
     }
-    setCurrentPage(1);
-  }, [dateRange]);
+    setCurrentPage(1); // Reset page to 1
+  }, [dateRange, patientRecord]);
 
   useEffect(() => {
-    if (patientRecord?.entries && currentPage > 0) {
-      const recordIndex = currentPage - 1;
-      if (recordIndex < patientRecord.entries.length) {
-        const selectedEntry = patientRecord.entries[recordIndex];
-        setRecordFilter([selectedEntry]);
-      } else {
-        setRecordFilter([]);
-      }
-    }
-  }, [currentPage, patientRecord]);  
+    // Update recordFilter for pagination
+    const pageSize = 1;
+    const startIndex = (currentPage - 1) * pageSize;
+    const paginatedRecords = filteredRecords.slice(
+      startIndex,
+      startIndex + pageSize
+    );
+    setRecordFilter(paginatedRecords);
+  }, [currentPage, filteredRecords]);
 
   return (
     <div className="p-6 bg-white rounded-lg">
@@ -69,6 +69,7 @@ export const PatientRecord = () => {
       </div>
       {patientRecord ? (
         <div className="space-y-6">
+          {/* Thông tin bệnh nhân */}
           <div className="border p-4 rounded-xl space-y-1">
             <h2 className="text-xl font-semibold">Thông tin bệnh nhân</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
@@ -96,11 +97,13 @@ export const PatientRecord = () => {
             </div>
           </div>
 
+          {/* Ghi chú */}
           <div className="border p-4 rounded-xl space-y-1">
             <h2 className="text-xl font-semibold">Ghi chú</h2>
             <p>{patientRecord?.notes}</p>
           </div>
 
+          {/* Bộ lọc và danh sách */}
           <div className="border p-4 rounded-xl space-y-1">
             <div className="flex justify-between">
               <div className="flex gap-2 items-center">
@@ -115,11 +118,7 @@ export const PatientRecord = () => {
               <div>
                 <Pagination
                   defaultCurrent={1}
-                  total={
-                    dateRange && dateRange[0] !== ""
-                      ? recordFilter.length
-                      : patientRecord?.entries.length
-                  }
+                  total={filteredRecords.length}
                   pageSize={1}
                   showSizeChanger={false}
                   onChange={(page) => setCurrentPage(page)}

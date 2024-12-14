@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Header } from "./layouts/Header";
+import { Footer } from "./layouts/Footer";
 import {
   Appointment,
   Authentication,
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="patient-info" element={<PatientInfo />} />
         </Routes>
       </main>
+      <Footer />
     </>
   );
 }
