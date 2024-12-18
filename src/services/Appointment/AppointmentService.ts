@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/api/axiosInstance";
 import { useApiRequest } from "@/hooks/useApiRequest";
+import { FormValue } from "@/types/Appointment";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -8,7 +9,7 @@ export const AppointmentService = () => {
   const loadingType = {
     Appointment: "Appointment",
   };
-  const appointment = async (formValues: any) => {
+  const appointment = async (formValues: FormValue) => {
     const response = await useApiRequest({
       apiCall: axiosInstance.post("appointment", formValues),
       loadingType: loadingType.Appointment,

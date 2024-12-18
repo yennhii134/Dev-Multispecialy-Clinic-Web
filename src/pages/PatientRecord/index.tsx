@@ -63,7 +63,7 @@ export const PatientRecord = () => {
   return (
     <div className="p-6 bg-white rounded-lg">
       <div className="flex justify-center">
-        <h1 className="text-2xl font-bold mb-4 text-center text-primary-600 bg-primary-100 p-2 rounded-xl">
+        <h1 className="text-2xl font-bold mb-4 text-center p-2 rounded-xl">
           Hồ sơ bệnh nhân
         </h1>
       </div>
@@ -105,7 +105,7 @@ export const PatientRecord = () => {
 
           {/* Bộ lọc và danh sách */}
           <div className="border p-4 rounded-xl space-y-1">
-            <div className="flex justify-between">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-2 justify-between">
               <div className="flex gap-2 items-center">
                 <div className="text-base font-semibold">Lọc theo ngày</div>
                 <DatePicker.RangePicker

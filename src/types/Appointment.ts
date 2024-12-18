@@ -1,4 +1,4 @@
-import { Patient } from "@/types/User";
+import { Patient } from "./User";
 
 export enum Service {
   InHour = "InHour",
@@ -11,11 +11,11 @@ export enum Gender {
 export type FormValue = {
   service?: Service;
   date?: string;
-  time?: string;
+  time?: string | null;
   symptoms?: string;
   patient?: Patient;
   doctor?: {
-    name?: string;
+    name?: string | null;
     specialization?: string;
   };
 };

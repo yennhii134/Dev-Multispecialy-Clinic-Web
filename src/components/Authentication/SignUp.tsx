@@ -3,15 +3,16 @@ import { useState } from "react";
 import { screenKey } from "./stores/screenKey";
 import { SignUpWPatientId } from "./SignUpWPatientId";
 import { SignUpWUsername } from "./SignUpWUsername";
+import { formValue } from "./stores";
+import { useResetRecoilState } from "recoil";
+import { IAuthFormProps } from "@/types/Authentication";
 
-export const SignUp = ({
-  setIsScreen,
-}: {
-  setIsScreen: (value: string) => void;
-}) => {
-  const [valueRegister, setValueRegister] = useState("RegisterPatient");
+export const SignUp = ({ setIsScreen }: IAuthFormProps) => {
+  const [valueRegister, setValueRegister] = useState("RegisterUserName");
+  const clearFormValue = useResetRecoilState(formValue);
 
   const onChange = (e: RadioChangeEvent) => {
+    clearFormValue();
     setValueRegister(e.target.value);
   };
 
@@ -27,19 +28,15 @@ export const SignUp = ({
           buttonStyle="solid"
           className="space-x-4"
         >
-          <Radio.Button value={"RegisterPatient"}>
-            Đăng ký với mã bệnh nhân
-          </Radio.Button>
-          <Radio.Button value={"RegisterUserName"}>
-            Đăng ký với tên đăng nhập
-          </Radio.Button>
+          <Radio.Button value={"RegisterUserName"}>Bệnh nhân mới</Radio.Button>
+          <Radio.Button value={"RegisterPatient"}>Bệnh nhân cũ</Radio.Button>
         </Radio.Group>
       </div>
       <div className="space-y-4">
         {
           {
-            RegisterPatient: <SignUpWPatientId setIsScreen={setIsScreen} />,
             RegisterUserName: <SignUpWUsername setIsScreen={setIsScreen} />,
+            RegisterPatient: <SignUpWPatientId setIsScreen={setIsScreen} />,
           }[valueRegister]
         }
       </div>

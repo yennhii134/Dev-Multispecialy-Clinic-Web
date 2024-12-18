@@ -1,4 +1,3 @@
-import "./index.scss";
 import { Button } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/assets/img/logoDMC3.png";
@@ -24,7 +23,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="header-wrapper bg-white fixed top-0 left-0 z-50 w-full">
+    <div className="bg-white fixed top-0 left-0 z-50 w-full">
       <div className="w-full flex items-center justify-between pl-12 md:pl-20 pr-8 md:pr-10 space-x-4 ">
         <Link to="/" className="flex items-center">
           <img
