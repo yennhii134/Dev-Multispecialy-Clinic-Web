@@ -22,7 +22,7 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
 export const OTP = () => {
-  const [timeLeft, setTimeLeft] = useState<number>(10);
+  const [timeLeft, setTimeLeft] = useState<number>(30);
   const [otp, setOtp] = useState<string>("");
   const { isLoading, typeLoading, signUp, signIn } = AuthenService();
   const navigate = useNavigate();
@@ -58,6 +58,7 @@ export const OTP = () => {
           form?.patient?.phone,
           recaptchaVerifier
         );
+        setTimeLeft(30);
         setConfirmationResult(sendOTP);
         setIsPending(false);
         toast.success("Mã OTP đã được gửi");
@@ -96,13 +97,27 @@ export const OTP = () => {
     return () => clearInterval(intervalId);
   }, [timeLeft]);
 
-  const handleResendOtp = () => {
-    setTimeLeft(10);
+  const handleResendOtp = async () => {
+    setTimeLeft(30);
+    if (!confirmationResult && form?.patient?.phone) {
+      try {
+        setIsPending(true);
+        const sendOTP = await FirebaseService.getInstance().sendOTP(
+          form?.patient?.phone,
+          recaptchaVerifier
+        );
+        setConfirmationResult(sendOTP);
+        setIsPending(false);
+        toast.success("Mã OTP đã được gửi");
+      } catch (error: any) {
+        toast.error(error.message);
+        setIsPending(false);
+      }
+    }
   };
 
   const handleSignUp = () => {
     signUp(form).then((response) => {
-      console.log("response handleSignUp", response);
       if (!response?.status) {
         toast.error(response?.data?.message);
       } else {
@@ -144,20 +159,27 @@ export const OTP = () => {
               value={otp}
               onChange={(value) => setOtp(value)}
             />
-            <div className="w-full flex justify-end">
-              {timeLeft === 0 ? (
-                <div
-                  className="text-sm font-semibold text-blue2 cursor-pointer"
-                  onClick={handleResendOtp}
-                >
-                  Gửi lại mã
-                </div>
-              ) : (
-                <div className="text-sm">
-                  Mã sẽ được gửi lại sau {timeLeft}s
-                </div>
-              )}
-            </div>
+            {confirmationResult && (
+              <div className="w-full flex justify-end">
+                {timeLeft === 0 ? (
+                  <div
+                    className="text-sm font-semibold text-blue2 cursor-pointer"
+                    onClick={() => {
+                      setConfirmationResult(undefined);
+                      handleResendOtp();
+                    }}
+                  >
+                    Gửi lại mã
+                  </div>
+                ) : typeLoading.signUp ? (
+                  <span className="loading loading-spinner" />
+                ) : (
+                  <div className="text-sm text-gray2">
+                    Gửi lại mã sau {timeLeft}s
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <Button
             onClick={handleSubmit}
