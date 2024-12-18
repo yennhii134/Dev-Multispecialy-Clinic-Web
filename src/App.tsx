@@ -6,6 +6,7 @@ import {
   Home,
   PatientRecord,
   PatientInfo,
+  AppointmentList,
 } from "./pages";
 import { PrivateRoute } from "./routes/PrivateRoute";
 
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="booking" element={<Appointment />} />
             <Route path="patient-record" element={<PatientRecord />} />
             <Route path="patient-info" element={<PatientInfo />} />
+            <Route path="appointments" element={<AppointmentList />} />
           </Route>
         </Routes>
       </main>

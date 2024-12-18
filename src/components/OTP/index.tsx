@@ -27,7 +27,7 @@ const auth = getAuth(app);
 
 export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
   const [phone, setPhone] = useState<string>("");
-  const [timeLeft, setTimeLeft] = useState<number>(10);
+  const [timeLeft, setTimeLeft] = useState<number>(30);
   const [otp, setOtp] = useState<string>("");
   const { isLoading, typeLoading, signUp, signIn } = AuthenService();
   const { updateInfo } = PatientService();
@@ -73,6 +73,7 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
           phone,
           recaptchaVerifier
         );
+        setTimeLeft(30);
         setConfirmationResult(sendOTP);
         setIsPending(false);
         toast.success("Mã OTP đã được gửi");
@@ -99,8 +100,6 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
           }
         }
       } catch (error: any) {
-        console.log("error", error);
-
         toast.error(error.message);
         setIsPending(false);
       }
@@ -117,8 +116,23 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
     return () => clearInterval(intervalId);
   }, [timeLeft]);
 
-  const handleResendOtp = () => {
-    setTimeLeft(10);
+  const handleResendOtp = async () => {
+    setTimeLeft(30);
+    if (!confirmationResult && phone) {
+      try {
+        setIsPending(true);
+        const sendOTP = await FirebaseService.getInstance().sendOTP(
+          phone,
+          recaptchaVerifier
+        );
+        setConfirmationResult(sendOTP);
+        setIsPending(false);
+        toast.success("Mã OTP đã được gửi");
+      } catch (error: any) {
+        toast.error(error.message);
+        setIsPending(false);
+      }
+    }
   };
 
   const handleSignUp = () => {
@@ -133,6 +147,7 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
           password: typedForm?.password,
         }).then((response) => {
           if (!response?.status) {
+            console.log("response handleSignIn", response);
           } else {
             setAccessToken(response?.data?.access_token);
             navigate("/");

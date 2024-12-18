@@ -37,8 +37,13 @@ export const useGetSpecializations = () => {
 
   useEffect(() => {
     fetchSpecializations();
-    fetchDoctors();
   }, []);
 
-  return { specializations, doctors, setSpecializations };
+  return {
+    specializations,
+    doctors,
+    setSpecializations,
+    fetchSpecializations,
+    fetchDoctors,
+  };
 };

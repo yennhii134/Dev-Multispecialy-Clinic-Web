@@ -46,11 +46,10 @@ export const PatientRecord = () => {
     } else {
       setFilteredRecords(patientRecord?.entries || []);
     }
-    setCurrentPage(1); // Reset page to 1
+    setCurrentPage(1); 
   }, [dateRange, patientRecord]);
 
   useEffect(() => {
-    // Update recordFilter for pagination
     const pageSize = 1;
     const startIndex = (currentPage - 1) * pageSize;
     const paginatedRecords = filteredRecords.slice(

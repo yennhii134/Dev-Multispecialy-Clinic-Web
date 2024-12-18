@@ -8,6 +8,8 @@ export const AppointmentService = () => {
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const loadingType = {
     Appointment: "Appointment",
+    getAppointments: "getAppointments",
+    cancelAppointment: "cancelAppointment",
   };
   const appointment = async (formValues: FormValue) => {
     const response = await useApiRequest({
@@ -23,5 +25,27 @@ export const AppointmentService = () => {
     return false;
   };
 
-  return { isLoading, loadingType, appointment };
+  const getAppointments = async () => {
+    return await useApiRequest({
+      apiCall: axiosInstance.get("appointment/me"),
+      loadingType: loadingType.getAppointments,
+      setIsLoading,
+    });
+  };
+
+  const cancelAppointment = async (id: number) => {
+    return await useApiRequest({
+      apiCall: axiosInstance.delete(`appointment/cancel/${id}`),
+      loadingType: loadingType.cancelAppointment,
+      setIsLoading,
+    });
+  };
+
+  return {
+    isLoading,
+    loadingType,
+    appointment,
+    getAppointments,
+    cancelAppointment,
+  };
 };

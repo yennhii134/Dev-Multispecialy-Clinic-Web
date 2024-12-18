@@ -85,13 +85,11 @@ export const PatientInfo = () => {
 
   const handleUpdateInfo = async (values: any) => {
     console.log("values", values);
+    console.log("user", user);
 
     if (
-      values.fullName === user?.fullName &&
       values.phone === user?.phone &&
       values.email === user?.email &&
-      values.dob === dayjs(user?.dob) &&
-      values.gender === user?.gender &&
       values.address.city === user?.address?.city &&
       values.address.state === user?.address?.state &&
       values.address.address === user?.address?.address
@@ -100,20 +98,11 @@ export const PatientInfo = () => {
       return;
     }
 
-    if (user?.fullName && !values.fullName) {
-      toast.error("Họ tên không được để trống");
-      return;
-    }
-
     if (user?.phone && !values.phone) {
       toast.error("Số điện thoại không được để trống");
       return;
     }
 
-    if (user?.dob && !values.dob) {
-      toast.error("Ngày sinh không được để trống");
-      return;
-    }
     if (user?.email && !values.email) {
       toast.error("Email không được để trống");
       return;

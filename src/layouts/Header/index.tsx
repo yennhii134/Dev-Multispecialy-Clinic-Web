@@ -1,13 +1,18 @@
-import { Button } from "antd";
+import { Button, Menu, MenuProps } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/assets/img/logoDMC3.png";
 import { useRecoilValue } from "recoil";
 import { userValue } from "@/stores/user";
 import { FaUserCircle } from "react-icons/fa";
-import { IoLogOutOutline } from "react-icons/io5";
+import { IoLogOutOutline, IoMenu } from "react-icons/io5";
 import { useAuthContext } from "@/context/AuthContext";
 import toast from "react-hot-toast";
-import { EditFilled } from "@ant-design/icons";
+import { SlCalender } from "react-icons/sl";
+import { LuPenLine } from "react-icons/lu";
+import { useMediaQuery } from "react-responsive";
+import { HiOutlineClipboardList } from "react-icons/hi";
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -15,12 +20,80 @@ export const Header = () => {
   const user = useRecoilValue(userValue);
   const isScreenAuth = location.pathname.includes("/auth");
   const { setAccessToken } = useAuthContext();
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const handleLogout = () => {
     setAccessToken(null);
     navigate("/");
     toast.success("Đăng xuất thành công");
   };
+
+  const menuClass =
+    "flex items-center gap-2 hover:bg-primary-500 px-3 w-full hover:text-white cursor-pointer";
+
+  const items: MenuItem[] = [
+    {
+      label: (
+        <div className="flex items-center">
+          <IoMenu className="text-3xl text-primary-500" />
+        </div>
+      ),
+      key: "subMenu",
+      children: [
+        {
+          key: "appoinemt",
+          label: (
+            <div className={menuClass} onClick={() => navigate("/booking")}>
+              <SlCalender className="text-xl" />
+              <span className="">Đặt lịch hẹn</span>
+            </div>
+          ),
+        },
+        {
+          key: "record",
+          label: (
+            <div
+              className={menuClass}
+              onClick={() => navigate("/patient-record")}
+            >
+              <FaUserCircle className="text-2xl" />
+              <span className="">Tra cứu hồ sơ bệnh án</span>
+            </div>
+          ),
+        },
+        {
+          key: "appoinemts",
+          label: (
+            <div
+              className={menuClass}
+              onClick={() => navigate("/appointments")}
+            >
+              <HiOutlineClipboardList className="text-xl" />
+              <span className="">Tra cứu lịch hẹn</span>
+            </div>
+          ),
+        },
+        {
+          key: "info",
+          label: (
+            <div className={menuClass} onClick={() => navigate("patient-info")}>
+              <LuPenLine className="text-2xl" />
+              <span className="">Chỉnh sửa thông tin</span>
+            </div>
+          ),
+        },
+        {
+          key: "logout",
+          label: (
+            <div className={menuClass} onClick={handleLogout}>
+              <IoLogOutOutline className="text-2xl" />
+              <span className="">Đăng xuất</span>
+            </div>
+          ),
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="bg-white fixed top-0 left-0 z-50 w-full">
@@ -34,29 +107,12 @@ export const Header = () => {
         </Link>
         <div className="flex items-center gap-2">
           {user ? (
-            <>
-              <div
-                className="flex items-center gap-2 bg-primary-500 py-2 px-3 rounded-xl text-white cursor-pointer"
-                onClick={() => navigate("/patient-record")}
-              >
-                <FaUserCircle className="text-2xl" />
-                <span className="max-lg:hidden">Tra cứu hồ sơ bệnh án</span>
-              </div>
-              <div
-                className="flex items-center gap-2 bg-primary-500 py-2 px-3 rounded-xl text-white cursor-pointer"
-                onClick={() => navigate("patient-info")}
-              >
-                <EditFilled className="text-2xl" />
-                <span className="max-lg:hidden">Chỉnh sửa thông tin</span>
-              </div>
-              <div
-                className="flex items-center gap-2  py-2 px-3 border border-primary-500 rounded-xl text-primary-500 cursor-pointer"
-                onClick={handleLogout}
-              >
-                <IoLogOutOutline className="text-2xl" />
-                <span className="max-lg:hidden">Đăng xuất</span>
-              </div>
-            </>
+            <Menu
+              selectedKeys={["subMenu"]}
+              mode={isDesktop ? "horizontal" : "vertical"}
+              items={items}
+              className=""
+            />
           ) : (
             <>
               {!isScreenAuth && (
