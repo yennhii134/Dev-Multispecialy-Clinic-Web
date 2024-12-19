@@ -4,8 +4,9 @@ import { Button, Form, Input, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { screenKey } from "./stores/screenKey";
 import { useRecoilState } from "recoil";
-import { formValue, IAuthFormProps } from "./stores";
+import { formValue } from "./stores";
 import { useCheckPassword } from "./hooks/useCheckPassword";
+import { IAuthFormProps } from "@/types/Authentication";
 
 export const SignUpWPatientId = ({ setIsScreen }: IAuthFormProps) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);

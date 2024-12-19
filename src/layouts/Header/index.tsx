@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/assets/img/logoDMC3.png";
 import { useRecoilValue } from "recoil";
 import { userValue } from "@/stores/user";
-import { FaUserCircle } from "react-icons/fa";
+import { FaRegUserCircle } from "react-icons/fa";
 import { IoLogOutOutline, IoMenu } from "react-icons/io5";
 import { useAuthContext } from "@/context/AuthContext";
 import toast from "react-hot-toast";
@@ -28,8 +28,7 @@ export const Header = () => {
     toast.success("Đăng xuất thành công");
   };
 
-  const menuClass =
-    "flex items-center gap-2 hover:bg-primary-500 px-3 w-full hover:text-white cursor-pointer";
+  const menuClass = "flex items-center gap-2 px-3 w-full cursor-pointer";
 
   const items: MenuItem[] = [
     {
@@ -56,7 +55,7 @@ export const Header = () => {
               className={menuClass}
               onClick={() => navigate("/patient-record")}
             >
-              <FaUserCircle className="text-2xl" />
+              <FaRegUserCircle className="text-2xl" />
               <span className="">Tra cứu hồ sơ bệnh án</span>
             </div>
           ),

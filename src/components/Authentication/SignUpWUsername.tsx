@@ -17,6 +17,7 @@ import { useAddress } from "@/hooks/useAddress";
 import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { useCheckPassword } from "./hooks/useCheckPassword";
+import { is } from "date-fns/locale";
 
 export const SignUpWUsername = ({
   setIsScreen,
@@ -30,8 +31,7 @@ export const SignUpWUsername = ({
   const [formAntd] = Form.useForm();
   const { checkedRules, handleCheckPassword, titleTooltip } =
     useCheckPassword();
-
-  console.log("form in SignUpWUsername", form);
+  const [isDisbaleUsername, setIsDisableUsername] = useState<boolean>(true);
 
   useEffect(() => {
     fetchAddressData();
@@ -108,6 +108,36 @@ export const SignUpWUsername = ({
     handleCheckPassword(form.password);
   }, [form.password]);
 
+  useEffect(() => {
+    if (!form.username) return;
+    const isValidUsername = /^(?=.*[a-zA-Z])(?=.*[0-9])[^\s]{7,}$/.test(
+      form.username
+    );
+    setIsDisableUsername(!isValidUsername);
+    if (isValidUsername && form.username.length > 4) {
+      let usernameUpperCase = form.username.toUpperCase();
+      checkExistUsername(usernameUpperCase).then((response) => {
+        if (!response?.status) {
+          formAntd.setFields([
+            {
+              name: "username",
+              errors: [response?.data.message],
+            },
+          ]);
+          setIsDisableUsername(true);
+        } else {
+          formAntd.setFields([
+            {
+              name: "username",
+              errors: [],
+            },
+          ]);
+          setIsDisableUsername(false);
+        }
+      });
+    }
+  }, [form.username]);
+
   return (
     <Form layout="vertical" form={formAntd}>
       <div className="space-y-4">
@@ -154,7 +184,7 @@ export const SignUpWUsername = ({
                 message: "Vui lòng nhập tên đăng nhập",
               },
               {
-                pattern: new RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9])\S{7,}$/),
+                pattern: new RegExp(/^(?=.*[a-zA-Z])(?=.*[0-9])[^\s]{7,}$/),
                 message:
                   "Tên đăng nhập phải có ít nhất 1 ký tự số và chữ, lớn hơn 6 ký tự và không chứa khoảng trắng",
               },
@@ -363,7 +393,8 @@ export const SignUpWUsername = ({
               !form.password ||
               !form.confirmPassword ||
               form.password !== form.confirmPassword ||
-              checkedRules.length < 5
+              checkedRules.length < 5 ||
+              isDisbaleUsername
             }
           >
             Đăng ký
