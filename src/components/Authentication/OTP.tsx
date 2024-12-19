@@ -52,7 +52,7 @@ export const OTP = () => {
       try {
         setIsPending(true);
         const sendOTP = await FirebaseService.getInstance().sendOTP(
-          form?.patient?.phone,
+          form?.patient?.phone!,
           recaptchaVerifier
         );
         setTimeLeft(30);
@@ -95,21 +95,35 @@ export const OTP = () => {
   }, [timeLeft]);
 
   const handleResendOtp = async () => {
-    setTimeLeft(30);
-    if (!confirmationResult && form?.patient?.phone) {
-      try {
-        setIsPending(true);
-        const sendOTP = await FirebaseService.getInstance().sendOTP(
-          form?.patient?.phone,
-          recaptchaVerifier
-        );
-        setConfirmationResult(sendOTP);
-        setIsPending(false);
-        toast.success("Mã OTP đã được gửi");
-      } catch (error: any) {
-        toast.error(error.message);
-        setIsPending(false);
+    if (recaptchaVerifier) {
+      console.log("Clear recaptchaVerifier");
+      
+      recaptchaVerifier.clear();
+      setRecaptchaVerifier(null);
+    }
+
+    const newRecaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "invisible",
       }
+    );
+    setRecaptchaVerifier(newRecaptchaVerifier);
+
+    try {
+      setIsPending(true);
+      const sendOTP = await FirebaseService.getInstance().sendOTP(
+        form?.patient?.phone!,
+        newRecaptchaVerifier
+      );
+      setConfirmationResult(sendOTP);
+      setIsPending(false);
+      setTimeLeft(30); // Reset timer
+      toast.success("Mã OTP đã được gửi");
+    } catch (error: any) {
+      toast.error(error.message);
+      setIsPending(false);
     }
   };
 
@@ -144,27 +158,26 @@ export const OTP = () => {
               value={otp}
               onChange={(value) => setOtp(value)}
             />
-            {confirmationResult && (
-              <div className="w-full flex justify-end">
-                {timeLeft === 0 ? (
-                  <div
-                    className="text-sm font-semibold text-blue2 cursor-pointer"
-                    onClick={() => {
-                      setConfirmationResult(undefined);
-                      handleResendOtp();
-                    }}
-                  >
-                    Gửi lại mã
-                  </div>
-                ) : typeLoading.signUp ? (
-                  <span className="loading loading-spinner" />
-                ) : (
-                  <div className="text-sm text-gray2">
-                    Gửi lại mã sau {timeLeft}s
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="w-full flex justify-end">
+              {timeLeft === 0 ? (
+                <div
+                  className="text-sm font-semibold text-blue2 cursor-pointer"
+                  onClick={() => {
+                    setConfirmationResult(undefined);
+                    setRecaptchaVerifier(null);
+                    handleResendOtp();
+                  }}
+                >
+                  Gửi lại mã
+                </div>
+              ) : isPeding ? (
+                <span className="loading loading-spinner" />
+              ) : (
+                <div className="text-sm text-gray2">
+                  Gửi lại mã sau {timeLeft}s
+                </div>
+              )}
+            </div>
           </div>
           <Button
             onClick={handleSubmit}
