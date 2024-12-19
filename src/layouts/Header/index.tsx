@@ -1,7 +1,7 @@
 import { Button, Menu, MenuProps } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "@/assets/img/logoDMC3.png";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userValue } from "@/stores/user";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoLogOutOutline, IoMenu } from "react-icons/io5";
@@ -11,6 +11,7 @@ import { SlCalender } from "react-icons/sl";
 import { LuPenLine } from "react-icons/lu";
 import { useMediaQuery } from "react-responsive";
 import { HiOutlineClipboardList } from "react-icons/hi";
+import { isScreenAuthenValue } from "@/components/Authentication/stores";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -21,6 +22,7 @@ export const Header = () => {
   const isScreenAuth = location.pathname.includes("/auth");
   const { setAccessToken } = useAuthContext();
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
+  const clearIsScreenAuth = useResetRecoilState(isScreenAuthenValue);
 
   const handleLogout = () => {
     setAccessToken(null);
@@ -118,7 +120,10 @@ export const Header = () => {
                 <Button
                   type="primary"
                   className="px-6 py-[10px] rounded-2xl"
-                  onClick={() => navigate("/auth")}
+                  onClick={() => {
+                    clearIsScreenAuth();
+                    navigate("/auth");
+                  }}
                 >
                   Đăng nhập / Đăng ký
                 </Button>

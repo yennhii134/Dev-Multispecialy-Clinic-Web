@@ -3,13 +3,13 @@ import { useState } from "react";
 import { screenKey } from "./stores/screenKey";
 import { SignUpWPatientId } from "./SignUpWPatientId";
 import { SignUpWUsername } from "./SignUpWUsername";
-import { formValue } from "./stores";
-import { useResetRecoilState } from "recoil";
-import { IAuthFormProps } from "@/types/Authentication";
+import { formValue, isScreenAuthenValue } from "./stores";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 
-export const SignUp = ({ setIsScreen }: IAuthFormProps) => {
+export const SignUp: React.FC = () => {
   const [valueRegister, setValueRegister] = useState("RegisterUserName");
   const clearFormValue = useResetRecoilState(formValue);
+  const setIsScreenAuthen = useSetRecoilState(isScreenAuthenValue);
 
   const onChange = (e: RadioChangeEvent) => {
     clearFormValue();
@@ -35,8 +35,8 @@ export const SignUp = ({ setIsScreen }: IAuthFormProps) => {
       <div className="space-y-4">
         {
           {
-            RegisterUserName: <SignUpWUsername setIsScreen={setIsScreen} />,
-            RegisterPatient: <SignUpWPatientId setIsScreen={setIsScreen} />,
+            RegisterUserName: <SignUpWUsername />,
+            RegisterPatient: <SignUpWPatientId />,
           }[valueRegister]
         }
       </div>
@@ -44,7 +44,7 @@ export const SignUp = ({ setIsScreen }: IAuthFormProps) => {
         <div>Đã có tài khoản?</div>
         <i
           className="text-blue2 cursor-pointer"
-          onClick={() => setIsScreen(screenKey.signIn)}
+          onClick={() => setIsScreenAuthen(screenKey.signIn)}
         >
           Đăng nhập
         </i>

@@ -8,8 +8,8 @@ import {
   Select,
   Tooltip,
 } from "antd";
-import { useRecoilState } from "recoil";
-import { formValue } from "./stores";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { formValue, isScreenAuthenValue } from "./stores";
 import { screenKey } from "./stores/screenKey";
 import { AuthenService } from "@/services/Authen/AuthenService";
 import toast from "react-hot-toast";
@@ -17,13 +17,8 @@ import { useAddress } from "@/hooks/useAddress";
 import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { useCheckPassword } from "./hooks/useCheckPassword";
-import { is } from "date-fns/locale";
 
-export const SignUpWUsername = ({
-  setIsScreen,
-}: {
-  setIsScreen: (value: string) => void;
-}) => {
+export const SignUpWUsername: React.FC = () => {
   const [form, setForm] = useRecoilState(formValue);
   const { checkExistUsername } = AuthenService();
   const { citys, fetchAddressData, fetchDistrictData } = useAddress();
@@ -32,6 +27,7 @@ export const SignUpWUsername = ({
   const { checkedRules, handleCheckPassword, titleTooltip } =
     useCheckPassword();
   const [isDisbaleUsername, setIsDisableUsername] = useState<boolean>(true);
+  const setIsScreenAuthen = useSetRecoilState(isScreenAuthenValue);
 
   useEffect(() => {
     fetchAddressData();
@@ -39,12 +35,7 @@ export const SignUpWUsername = ({
 
   const handleSignUp = async () => {
     if (!form.username) return;
-    const response = await checkExistUsername(form.username);
-    if (!response?.status) {
-      toast.error(response?.data.message);
-      return;
-    }
-    setIsScreen(screenKey.otp);
+    setIsScreenAuthen(screenKey.otp);
   };
 
   const handleInput = (value: string) => {
@@ -117,22 +108,24 @@ export const SignUpWUsername = ({
     if (isValidUsername && form.username.length > 4) {
       let usernameUpperCase = form.username.toUpperCase();
       checkExistUsername(usernameUpperCase).then((response) => {
-        if (!response?.status) {
-          formAntd.setFields([
-            {
-              name: "username",
-              errors: [response?.data.message],
-            },
-          ]);
-          setIsDisableUsername(true);
-        } else {
-          formAntd.setFields([
-            {
-              name: "username",
-              errors: [],
-            },
-          ]);
-          setIsDisableUsername(false);
+        if (response?.status) {
+          if (response?.data?.isExist) {
+            formAntd.setFields([
+              {
+                name: "username",
+                errors: [response?.data.message],
+              },
+            ]);
+            setIsDisableUsername(true);
+          } else {
+            formAntd.setFields([
+              {
+                name: "username",
+                errors: [],
+              },
+            ]);
+            setIsDisableUsername(false);
+          }
         }
       });
     }

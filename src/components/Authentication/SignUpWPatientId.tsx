@@ -3,12 +3,11 @@ import { Patient } from "@/types/User";
 import { Button, Form, Input, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { screenKey } from "./stores/screenKey";
-import { useRecoilState } from "recoil";
-import { formValue } from "./stores";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { formValue, isScreenAuthenValue } from "./stores";
 import { useCheckPassword } from "./hooks/useCheckPassword";
-import { IAuthFormProps } from "@/types/Authentication";
 
-export const SignUpWPatientId = ({ setIsScreen }: IAuthFormProps) => {
+export const SignUpWPatientId: React.FC = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [patientId, setPatientId] = useState<string>("");
   const [form, setForm] = useRecoilState(formValue);
@@ -16,6 +15,7 @@ export const SignUpWPatientId = ({ setIsScreen }: IAuthFormProps) => {
   const { checkPatiendId } = AuthenService();
   const { checkedRules, handleCheckPassword, titleTooltip } =
     useCheckPassword();
+  const setIsScreenAuthen = useSetRecoilState(isScreenAuthenValue);
 
   const handleGetById = async (patient: Patient) => {
     if (!patientId) return;
@@ -58,7 +58,7 @@ export const SignUpWPatientId = ({ setIsScreen }: IAuthFormProps) => {
 
   const handleSubmit = () => {
     if (!form.patient) return;
-    setIsScreen(screenKey.otp);
+    setIsScreenAuthen(screenKey.otp);
   };
 
   useEffect(() => {

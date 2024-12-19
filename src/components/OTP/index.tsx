@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { FirebaseService } from "@/services/Firebase.service";
 import { useAuthContext } from "@/context/AuthContext";
 import { OTPProps, OTPScreen } from "@/types/OTP";
-import { IFormValue } from "@/types/Authentication";
+import { IFormForgotPassword, IFormValue } from "@/types/Authentication";
 import { Patient } from "@/types/User";
 import { PatientService } from "@/services/Patient/PatientService";
 import { useSetRecoilState } from "recoil";
 import { isScreenPatientInfoValue } from "@/stores/patientInfo";
+import { isScreenAuthenValue } from "../Authentication/stores";
+import { screenKey } from "../Authentication/stores/screenKey";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -29,12 +31,13 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
   const [phone, setPhone] = useState<string>("");
   const [timeLeft, setTimeLeft] = useState<number>(30);
   const [otp, setOtp] = useState<string>("");
-  const { isLoading, typeLoading, signUp, signIn } = AuthenService();
+  const { isLoading, typeLoading, signUp, signIn, forgotPassword } =
+    AuthenService();
   const { updateInfo } = PatientService();
   const navigate = useNavigate();
   const [isPeding, setIsPending] = useState<boolean>(false);
   const setIsScreenPatientInfo = useSetRecoilState(isScreenPatientInfoValue);
-
+  const setIsScreenAuthen = useSetRecoilState(isScreenAuthenValue);
   const [recaptchaVerifier, setRecaptchaVerifier] =
     useState<RecaptchaVerifier | null>(null);
   const [confirmationResult, setConfirmationResult] =
@@ -47,6 +50,9 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
       setPhone(typedForm.patient?.phone || "");
     } else if (screen === OTPScreen.UpdateInfo) {
       const typedForm = form as Patient;
+      setPhone(typedForm.phone || "");
+    } else if (screen === OTPScreen.ForgotPassword) {
+      const typedForm = form as IFormForgotPassword;
       setPhone(typedForm.phone || "");
     }
   }, [screen, form]);
@@ -95,8 +101,10 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
           setOtp("");
           if (screen === OTPScreen.Authen) {
             handleSignUp();
-          } else {
+          } else if (screen === OTPScreen.UpdateInfo) {
             handleUpdateInfo();
+          } else if (screen === OTPScreen.ForgotPassword) {
+            handleResetPassword();
           }
         }
       } catch (error: any) {
@@ -164,6 +172,19 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
       await updateInfo(values.patientId, values);
       setIsScreenPatientInfo(true);
     }
+  };
+
+  const handleResetPassword = () => {
+    const typedForm = form as IFormForgotPassword;
+    const { username, password } = typedForm;
+    forgotPassword({ username, password }).then((response) => {
+      if (!response?.status) {
+        toast.error(response?.data?.message);
+      } else {
+        toast.success(response.data.message);
+        setIsScreenAuthen(screenKey.signIn);
+      }
+    });
   };
 
   return (

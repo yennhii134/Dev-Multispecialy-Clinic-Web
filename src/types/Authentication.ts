@@ -8,6 +8,15 @@ export interface IFormValue {
   confirmPassword?: string;
 }
 
+export interface IFormForgotPassword extends ForgotPassword {
+  phone?: string;
+}
+
+export interface ForgotPassword {
+  username?: string;
+  password?: string;
+}
+
 export interface IAuthFormProps {
   setIsScreen: (value: string) => void;
 }
