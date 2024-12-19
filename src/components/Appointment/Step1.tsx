@@ -71,7 +71,7 @@ export const Step1 = () => {
 
   const disabledDate: RangePickerProps["disabledDate"] = (current) => {
     const today = dayjs().startOf("day");
-    const maxDate = dayjs().add(15, "day").endOf("day");
+    const maxDate = dayjs().add(14, "day").endOf("day");
     return current && (current < today || current > maxDate);
   };
 
