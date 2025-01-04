@@ -7,6 +7,5 @@ export const PrivateRoute = () => {
   if (!accessToken) {
     return <Navigate to="/" replace />;
   }
-
   return <Outlet />;
 };
