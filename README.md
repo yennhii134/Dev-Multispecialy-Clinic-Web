@@ -44,8 +44,8 @@ Một nền tảng hiện đại hỗ trợ bệnh nhân quản lý thông tin c
 ---
 
 📚 Công Nghệ Sử Dụng
-Frontend: ReactJS, Tailwind CSS
-Xác thực: Firebase Authentication
-Quản lý trạng thái: Recoil
-API: Axios
-Cơ sở dữ liệu: MySQL
+Frontend: ReactJS, Tailwind CSS  
+Xác thực: Firebase Authentication  
+Quản lý trạng thái: Recoil  
+API: Axios  
+Cơ sở dữ liệu: MySQL  
