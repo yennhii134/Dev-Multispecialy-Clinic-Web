@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/779b57a7-3dd1-48bc-8f9c-7f283cc8c468)
 # 🌟 Website Phòng Khám Đa Khoa DMC 🌟
 
 Một nền tảng hiện đại hỗ trợ bệnh nhân quản lý thông tin cá nhân, lịch hẹn và hồ sơ y tế một cách thuận tiện khi đến khám tại Phòng khám Đa khoa DMC. Dự án tập trung vào trải nghiệm người dùng và tối ưu hóa quy trình quản lý y tế. *(Lưu ý: Phần xử lý khám bệnh được thực hiện trong một project khác).*
