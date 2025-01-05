@@ -45,7 +45,7 @@ Một nền tảng hiện đại hỗ trợ bệnh nhân quản lý thông tin c
 
 📚 Công Nghệ Sử Dụng  
 Frontend: ReactJS, Tailwind CSS  
-UI Component Library: Ant Design
+UI Component Library: Ant Design  
 Xác thực: Firebase Authentication  
 Quản lý trạng thái: Recoil  
 API: Axios  
