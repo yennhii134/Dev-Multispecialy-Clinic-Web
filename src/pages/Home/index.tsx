@@ -1,4 +1,4 @@
-import { Slide, Services, Special } from "@/components";
+import { Slide, Services, Special } from "@/components/Home";
 
 export const Home = () => {
   return (

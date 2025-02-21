@@ -12,6 +12,7 @@ import { LuPenLine } from "react-icons/lu";
 import { useMediaQuery } from "react-responsive";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { isScreenAuthenValue } from "@/components/Authentication/stores";
+import clsx from "clsx";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -98,7 +99,7 @@ export const Header = () => {
 
   return (
     <div className="bg-white fixed top-0 left-0 z-50 w-full">
-      <div className="w-full flex items-center justify-between pl-12 md:pl-20 pr-8 md:pr-10 space-x-4 ">
+      <div className="w-full flex items-center justify-between pl-12 md:pl-20 pr-8 md:pr-10 space-x-4">
         <Link to="/" className="flex items-center">
           <img
             src={Logo}
@@ -106,6 +107,50 @@ export const Header = () => {
             className="size-20 md:size-24 object-cover mx-3"
           />
         </Link>
+        <div className="max-lg:hidden w-full h-20 md:h-24 max-lg:pl-6 lg:px-40 space-x-4 lg:space-x-10 flex items-center">
+          <Link
+            to="/about-us"
+            className={clsx(
+              "text-sm lg:text-lg font-semibold text-blue6 hover:border-b-2 hover:border-blue6 h-full flex items-center",
+              {
+                "border-b-2 border-blue6":
+                  location.pathname.includes("/about-us"),
+              }
+            )}
+          >
+            Về chúng tôi
+          </Link>
+          <Link
+            to="/special"
+            className={clsx(
+              "text-sm lg:text-lg font-semibold text-blue6 hover:border-b-2 hover:border-blue6 h-full flex items-center",
+              {
+                "border-b-2 border-blue6":
+                  location.pathname.includes("/special"),
+              }
+            )}
+          >
+            Chuyên khoa
+          </Link>
+          <Link
+            to="/"
+            className="text-sm lg:text-lg font-semibold text-blue6 hover:border-b-2 hover:border-blue6 h-full flex items-center"
+          >
+            Gói khám
+          </Link>
+          <Link
+            to="/"
+            className="text-sm lg:text-lg font-semibold text-blue6 hover:border-b-2 hover:border-blue6 h-full flex items-center"
+          >
+            Thành tựu
+          </Link>
+          <Link
+            to="/"
+            className="text-sm lg:text-lg font-semibold text-blue6 hover:border-b-2 hover:border-blue6 h-full flex items-center"
+          >
+            Cộng đồng
+          </Link>
+        </div>
         <div className="flex items-center gap-2">
           {user ? (
             <Menu

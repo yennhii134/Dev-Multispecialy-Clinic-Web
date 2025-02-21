@@ -85,3 +85,13 @@ body {
     }
   }
 }
+
+.transparent-gradient {
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(0, 155, 171, 0.8),
+    rgba(0, 116, 155, 0.8),
+    rgba(171, 223, 225, 0.8)
+  );
+}

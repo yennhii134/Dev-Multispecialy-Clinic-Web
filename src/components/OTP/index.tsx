@@ -72,46 +72,46 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
   }, [auth]);
 
   const handleSubmit = async () => {
-    if (!confirmationResult && phone) {
-      try {
-        setIsPending(true);
-        const sendOTP = await FirebaseService.getInstance().sendOTP(
-          phone,
-          recaptchaVerifier
-        );
-        setTimeLeft(30);
-        setConfirmationResult(sendOTP);
-        setIsPending(false);
-        toast.success("Mã OTP đã được gửi");
-      } catch (error: any) {
-        toast.error(error.message);
-        setIsPending(false);
-      }
-    } else {
-      try {
-        setIsPending(true);
-        if (confirmationResult) {
-          const verify = await FirebaseService.getInstance().confirmOTP(
-            confirmationResult,
-            otp
-          );
-          console.log("verify", verify);
-          setIsPending(false);
-          toast.success("Xác thực thành công");
-          setOtp("");
-          if (screen === OTPScreen.Authen) {
-            handleSignUp();
-          } else if (screen === OTPScreen.UpdateInfo) {
-            handleUpdateInfo();
-          } else if (screen === OTPScreen.ForgotPassword) {
-            handleResetPassword();
-          }
-        }
-      } catch (error: any) {
-        toast.error(error.message);
-        setIsPending(false);
-      }
+    // if (!confirmationResult && phone) {
+    //   try {
+    //     setIsPending(true);
+    //     const sendOTP = await FirebaseService.getInstance().sendOTP(
+    //       phone,
+    //       recaptchaVerifier
+    //     );
+    //     setTimeLeft(30);
+    //     setConfirmationResult(sendOTP);
+    //     setIsPending(false);
+    //     toast.success("Mã OTP đã được gửi");
+    //   } catch (error: any) {
+    //     toast.error(error.message);
+    //     setIsPending(false);
+    //   }
+    // } else {
+    //   try {
+    //     setIsPending(true);
+    //     if (confirmationResult) {
+    //       const verify = await FirebaseService.getInstance().confirmOTP(
+    //         confirmationResult,
+    //         otp
+    //       );
+    //       console.log("verify", verify);
+    //       setIsPending(false);
+    //       toast.success("Xác thực thành công");
+    //       setOtp("");
+    if (screen === OTPScreen.Authen) {
+      handleSignUp();
+    } else if (screen === OTPScreen.UpdateInfo) {
+      handleUpdateInfo();
+    } else if (screen === OTPScreen.ForgotPassword) {
+      handleResetPassword();
     }
+    // }
+    //   } catch (error: any) {
+    //     toast.error(error.message);
+    //     setIsPending(false);
+    //   }
+    // }
   };
 
   useEffect(() => {
