@@ -1,6 +1,5 @@
 import { useAuthContext } from "@/context/AuthContext";
 import { AuthenService } from "@/services/authen.service";
-import { FirebaseService } from "@/services/firebase.service";
 import { PatientService } from "@/services/patient.service";
 import { isScreenPatientInfoValue } from "@/stores/patientInfo";
 import { IFormForgotPassword, IFormValue } from "@/types/Authentication";
@@ -8,7 +7,7 @@ import { OTPProps, OTPScreen } from "@/types/OTP";
 import { Patient } from "@/types/User";
 import { Button, Input } from "antd";
 // import { getApp, getApps, initializeApp } from "firebase/app";
-import { ConfirmationResult, RecaptchaVerifier } from "firebase/auth";
+// import { ConfirmationResult, RecaptchaVerifier } from "firebase/auth";
 // import {  getAuth } from "firebase/auth";
 
 import { useEffect, useState } from "react";
@@ -37,14 +36,14 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
     AuthenService();
   const { updateInfo } = PatientService();
   const navigate = useNavigate();
-  const [isPeding, setIsPending] = useState<boolean>(false);
+  // const [isPeding, setIsPending] = useState<boolean>(false);
   const setIsScreenPatientInfo = useSetRecoilState(isScreenPatientInfoValue);
   const setIsScreenAuthen = useSetRecoilState(isScreenAuthenValue);
-  const [recaptchaVerifier, _setRecaptchaVerifier] =
-    useState<RecaptchaVerifier | null>(null);
+  // const [recaptchaVerifier, _setRecaptchaVerifier] =
+  //   useState<RecaptchaVerifier | null>(null);
 
-  const [confirmationResult, setConfirmationResult] =
-    useState<ConfirmationResult>();
+  // const [confirmationResult, setConfirmationResult] =
+  //   useState<ConfirmationResult>();
   const { setAccessToken } = useAuthContext();
 
   useEffect(() => {
@@ -127,24 +126,24 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
     return () => clearInterval(intervalId);
   }, [timeLeft]);
 
-  const handleResendOtp = async () => {
-    setTimeLeft(30);
-    if (!confirmationResult && phone) {
-      try {
-        setIsPending(true);
-        const sendOTP = await FirebaseService.getInstance().sendOTP(
-          phone,
-          recaptchaVerifier
-        );
-        setConfirmationResult(sendOTP);
-        setIsPending(false);
-        toast.success("Mã OTP đã được gửi");
-      } catch (error: any) {
-        toast.error(error.message);
-        setIsPending(false);
-      }
-    }
-  };
+  // const handleResendOtp = async () => {
+  //   setTimeLeft(30);
+  //   if (!confirmationResult && phone) {
+  //     try {
+  //       setIsPending(true);
+  //       const sendOTP = await FirebaseService.getInstance().sendOTP(
+  //         phone,
+  //         recaptchaVerifier
+  //       );
+  //       setConfirmationResult(sendOTP);
+  //       setIsPending(false);
+  //       toast.success("Mã OTP đã được gửi");
+  //     } catch (error: any) {
+  //       toast.error(error.message);
+  //       setIsPending(false);
+  //     }
+  //   }
+  // };
 
   const handleSignUp = () => {
     const typedForm = form as IFormValue;
@@ -217,7 +216,7 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
               {timeLeft === 0 ? (
                 <div
                   className="text-sm font-semibold text-blue2 cursor-pointer"
-                  onClick={handleResendOtp}
+                  // onClick={handleResendOtp}
                 >
                   Gửi lại mã
                 </div>
@@ -233,13 +232,13 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
             type="primary"
             loading={isLoading === typeLoading.signUp}
           >
-            {isPeding ? (
+            {/* {isPeding ? (
               <span className="loading loading-spinner" />
-            ) : confirmationResult ? (
-              "Xác thực"
-            ) : (
+            ) : confirmationResult ? ( */}
+            "Xác thực"
+            {/* ) : (
               "Gửi mã OTP"
-            )}
+            )} */}
           </Button>
         </div>
       </div>
