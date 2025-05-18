@@ -37,10 +37,10 @@ export const useGetAllAppointment = () => {
       }
     );
     return updatedAppointments;
-  }
+  };
 
   const handleGetAppointments = () => {
-    const dateNow = new Date();
+    // const dateNow = new Date();
 
     getAppointments().then((response) => {
       if (response?.status) {
