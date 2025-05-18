@@ -1,7 +1,7 @@
 import { Button, Form, Input, Tooltip } from "antd";
 import { TbLockSquareRounded, TbUserCircle } from "react-icons/tb";
 import { screenKey } from "@/components/Authentication/stores/screenKey";
-import { AuthenService } from "@/services/Authen/AuthenService";
+import { AuthenService } from "@/services/authen.service";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { formForgotPassword, isScreenAuthenValue } from "./stores";
 import { useEffect, useState } from "react";

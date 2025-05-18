@@ -1,4 +1,4 @@
-import { AuthenService } from "@/services/Authen/AuthenService";
+import { AuthenService } from "@/services/authen.service";
 import { Patient } from "@/types/User";
 import { Button, Form, Input, Tooltip } from "antd";
 import { useEffect, useState } from "react";

@@ -7,23 +7,26 @@ import {
   Radio,
   Select,
 } from "antd";
-import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
-import { formValuesState, stepState } from "./stores";
+import { useRecoilState } from "recoil";
+// import {  useResetRecoilState, useSetRecoilState } from "recoil";
+import { formValuesState } from "./stores";
+// import {stepState } from './stores'
+import { AppointmentService } from "@/services/appointment.service";
+import { formatDate } from "@/utils/formatDate";
+import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import { useAddress } from "../../hooks/useAddress";
-import dayjs, { Dayjs } from "dayjs";
-import { formatDate } from "@/utils/formatDate";
-import { AppointmentService } from "@/services/Appointment/AppointmentService";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 export const Step2 = ({ form }: { form: any }) => {
-  const setStep = useSetRecoilState(stepState);
+  // const setStep = useSetRecoilState(stepState);
   const { citys, fetchAddressData, fetchDistrictData } = useAddress();
   const [districts, setDistricts] = useState([]);
   const [formValues, setFormValues] = useRecoilState(formValuesState);
-  const clearFormValue = useResetRecoilState(formValuesState);
-  const { isLoading, loadingType, appointment } = AppointmentService();
-  const navigate = useNavigate();
+  // const clearFormValue = useResetRecoilState(formValuesState);
+  const { isLoading, loadingType } = AppointmentService();
+  // const { appointment } = AppointmentService();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     fetchAddressData();
@@ -79,43 +82,42 @@ export const Step2 = ({ form }: { form: any }) => {
   return (
     <>
       <div className={gridClasses}>
-
-      <Form.Item
-        label="Họ và tên"
-        name="name"
-        required
-        initialValue={formValues?.patient?.fullName}
-        rules={[{ required: true, message: "Họ và tên không được để trống" }]}
-      >
-        <Input
-          placeholder="Nhập họ và tên"
-          value={formValues?.patient?.fullName}
-          onChange={(e) => {
-            setFormValues((prev) => ({
-              ...prev,
-              patient: { ...prev?.patient, fullName: e.target.value },
-            }));
-          }}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Email"
-        name="email"
-        required
-        initialValue={formValues?.patient?.email}
-        // rules={[{ required: true, message: "Họ và tên không được để trống" }]}
-      >
-        <Input
-          placeholder="Nhập email"
-          value={formValues?.patient?.email}
-          onChange={(e) => {
-            setFormValues((prev) => ({
-              ...prev,
-              patient: { ...prev?.patient, email: e.target.value },
-            }));
-          }}
-        />
-      </Form.Item>
+        <Form.Item
+          label="Họ và tên"
+          name="name"
+          required
+          initialValue={formValues?.patient?.fullName}
+          rules={[{ required: true, message: "Họ và tên không được để trống" }]}
+        >
+          <Input
+            placeholder="Nhập họ và tên"
+            value={formValues?.patient?.fullName}
+            onChange={(e) => {
+              setFormValues((prev) => ({
+                ...prev,
+                patient: { ...prev?.patient, fullName: e.target.value },
+              }));
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Email"
+          name="email"
+          required
+          initialValue={formValues?.patient?.email}
+          // rules={[{ required: true, message: "Họ và tên không được để trống" }]}
+        >
+          <Input
+            placeholder="Nhập email"
+            value={formValues?.patient?.email}
+            onChange={(e) => {
+              setFormValues((prev) => ({
+                ...prev,
+                patient: { ...prev?.patient, email: e.target.value },
+              }));
+            }}
+          />
+        </Form.Item>
       </div>
       <div className={gridClasses}>
         <Form.Item

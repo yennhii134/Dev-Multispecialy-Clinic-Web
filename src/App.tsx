@@ -1,6 +1,6 @@
 import { Header } from "./layouts/Header";
-import { Footer } from "./layouts/Footer";
 import { AppRoute } from "./routes/AppRoute";
+import { Footer } from "./layouts/Footer";
 
 export default function App() {
   return (

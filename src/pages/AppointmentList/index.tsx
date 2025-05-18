@@ -1,4 +1,4 @@
-import { AppointmentService } from "@/services/Appointment/AppointmentService";
+import { AppointmentService } from "@/services/appointment.service";
 import { Appointment, StatusAppointment } from "@/types/Appointment";
 import { useEffect, useState } from "react";
 import {

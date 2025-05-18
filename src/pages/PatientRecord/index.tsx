@@ -1,6 +1,6 @@
 import { RowDetail } from "@/components/PatientRecord/RowDetail";
 import { TestList } from "@/components/PatientRecord/TestList";
-import { PatientService } from "@/services/Patient/PatientService";
+import { PatientService } from "@/services/patient.service";
 import { userValue } from "@/stores/user";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";

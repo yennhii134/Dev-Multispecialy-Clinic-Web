@@ -5,7 +5,7 @@ import { useAddress } from "@/hooks/useAddress";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
-import { PatientService } from "@/services/Patient/PatientService";
+import { PatientService } from "@/services/patient.service";
 import { OTP } from "@/components/OTP";
 import { OTPScreen } from "@/types/OTP";
 import { Patient } from "@/types/User";

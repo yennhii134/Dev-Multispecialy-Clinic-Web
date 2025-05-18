@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const DOMAIN = "https://zolachat.io.vn/api/";
-const DOMAIN = "http://localhost:8000";
+const DOMAIN = import.meta.env.VITE_API_SERVER;
 
 export const axiosInstance = axios.create({
   baseURL: DOMAIN,

@@ -1,4 +1,4 @@
-import { DoctorService } from "@/services/Doctor/DoctorService";
+import { DoctorService } from "@/services/doctor.service";
 import { useState } from "react";
 
 export const useGetDoctorBySpecialization = () => {

@@ -1,4 +1,4 @@
-import { DoctorService } from "@/services/Doctor/DoctorService";
+import { DoctorService } from "@/services/doctor.service";
 import { Doctor } from "@/types/Doctor";
 import { useEffect, useState } from "react";
 

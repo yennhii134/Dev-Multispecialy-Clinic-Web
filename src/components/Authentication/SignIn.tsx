@@ -1,7 +1,7 @@
 import { Button, Form, Input } from "antd";
 import { TbLockSquareRounded, TbUserCircle } from "react-icons/tb";
 import { screenKey } from "@/components/Authentication/stores/screenKey";
-import { AuthenService } from "@/services/Authen/AuthenService";
+import { AuthenService } from "@/services/authen.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";

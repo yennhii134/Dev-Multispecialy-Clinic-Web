@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PatientService } from "@/services/Patient/PatientService";
+import { PatientService } from "@/services/patient.service";
 import { AutoCompleteProps } from "antd";
 
 export const useGetPatientByPhone = () => {

@@ -1,31 +1,33 @@
-import { Button, Input } from "antd";
-import { useEffect, useState } from "react";
-import { getApp, getApps, initializeApp } from "firebase/app";
-import { ConfirmationResult, getAuth, RecaptchaVerifier } from "firebase/auth";
-import toast from "react-hot-toast";
-import { AuthenService } from "@/services/Authen/AuthenService";
-import { useNavigate } from "react-router-dom";
-import { FirebaseService } from "@/services/Firebase.service";
 import { useAuthContext } from "@/context/AuthContext";
-import { OTPProps, OTPScreen } from "@/types/OTP";
-import { IFormForgotPassword, IFormValue } from "@/types/Authentication";
-import { Patient } from "@/types/User";
-import { PatientService } from "@/services/Patient/PatientService";
-import { useSetRecoilState } from "recoil";
+import { AuthenService } from "@/services/authen.service";
+import { FirebaseService } from "@/services/firebase.service";
+import { PatientService } from "@/services/patient.service";
 import { isScreenPatientInfoValue } from "@/stores/patientInfo";
+import { IFormForgotPassword, IFormValue } from "@/types/Authentication";
+import { OTPProps, OTPScreen } from "@/types/OTP";
+import { Patient } from "@/types/User";
+import { Button, Input } from "antd";
+// import { getApp, getApps, initializeApp } from "firebase/app";
+import { ConfirmationResult, RecaptchaVerifier } from "firebase/auth";
+// import {  getAuth } from "firebase/auth";
+
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import { isScreenAuthenValue } from "../Authentication/stores";
 import { screenKey } from "../Authentication/stores/screenKey";
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
-  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
-};
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+// const firebaseConfig = {
+//   apiKey: import.meta.env.VITE_API_KEY,
+//   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+//   projectId: import.meta.env.VITE_PROJECT_ID,
+//   storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+//   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+//   appId: import.meta.env.VITE_APP_ID,
+// };
+// const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// const auth = getAuth(app);
 
 export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
   const [phone, setPhone] = useState<string>("");
@@ -38,8 +40,9 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
   const [isPeding, setIsPending] = useState<boolean>(false);
   const setIsScreenPatientInfo = useSetRecoilState(isScreenPatientInfoValue);
   const setIsScreenAuthen = useSetRecoilState(isScreenAuthenValue);
-  const [recaptchaVerifier, setRecaptchaVerifier] =
+  const [recaptchaVerifier, _setRecaptchaVerifier] =
     useState<RecaptchaVerifier | null>(null);
+
   const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult>();
   const { setAccessToken } = useAuthContext();
@@ -57,19 +60,19 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
     }
   }, [screen, form]);
 
-  useEffect(() => {
-    const recaptchaVerifier = new RecaptchaVerifier(
-      auth,
-      "recaptcha-container",
-      {
-        size: "invisible",
-      }
-    );
-    setRecaptchaVerifier(recaptchaVerifier);
-    return () => {
-      recaptchaVerifier.clear();
-    };
-  }, [auth]);
+  // useEffect(() => {
+  //   const recaptchaVerifier = new RecaptchaVerifier(
+  //     auth,
+  //     "recaptcha-container",
+  //     {
+  //       size: "invisible",
+  //     }
+  //   );
+  //   setRecaptchaVerifier(recaptchaVerifier);
+  //   return () => {
+  //     recaptchaVerifier.clear();
+  //   };
+  // }, [auth]);
 
   const handleSubmit = async () => {
     // if (!confirmationResult && phone) {
@@ -145,6 +148,7 @@ export const OTP: React.FC<OTPProps> = ({ screen, form }) => {
 
   const handleSignUp = () => {
     const typedForm = form as IFormValue;
+
     signUp(typedForm).then((response) => {
       if (!response?.status) {
         toast.error(response?.data?.message);

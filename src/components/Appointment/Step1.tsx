@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { useGetSpecializations } from "@/hooks/Doctor/useGetSpecializations";
 import { userValue } from "@/stores/user";
-import { AppointmentService } from "@/services/Appointment/AppointmentService";
+import { AppointmentService } from "@/services/appointment.service";
 import { useNavigate } from "react-router-dom";
 import { formValuesState } from "./stores";
 import { Service } from "@/types/Appointment";
